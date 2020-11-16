@@ -13,7 +13,7 @@ public class Employee {
     public float OperationSkills { get; private set; }
     public float ReleaseEngSkills { get; private set; }
     public float AutomationSkills { get; private set; }
-    public List<Feature> AssignedFeature { get; } = new List<Feature>();
+    public List<Feature> AssignedFeatures { get; } = new List<Feature>();
     public Team AssignedTeam { get; set; }
 
     public Employee(String name, int cost, float efficiency, float experience, float testingSkills, float operationSkills, float releaseEngSkills, float automationSkills) {
@@ -28,14 +28,14 @@ public class Employee {
     }
 
     // Work on the assigned feature, should be called once per day
-    private void Work() {
+    public void Work() {
         if (AssignedTeam == null) {
             Debug.LogError($"The employee {Name} has no assigned team but is required to work.");
             return;
         }
         var remainingCodingEffort = Constants.GlobalEffortFactor * Efficiency * (1f + AssignedTeam.DevOpsKnowledge);
         var remainingTestingEffort = Constants.GlobalTestEffortFactor * TestingSkills * (1f + AssignedTeam.TeamTestingKnowledge);
-        foreach (var feature in AssignedFeature.Where(feature => feature.CurrentState != Feature.State.Merged)) {
+        foreach (var feature in AssignedFeatures.Where(feature => feature.CurrentState != Feature.State.Merged)) {
             while (feature.RequireCoding || feature.RequireTesting) {
                 if (feature.RequireCoding && remainingCodingEffort <= Mathf.Epsilon) {
                     break;
