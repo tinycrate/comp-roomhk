@@ -35,8 +35,8 @@ public class Feature {
     public event EventHandler OnBuildFailed;
     public event EventHandler OnTestFailed;
 
-    private HashSet<Employee> coders = new HashSet<Employee>();
-    private HashSet<Employee> testers = new HashSet<Employee>();
+    private readonly HashSet<Employee> coders = new HashSet<Employee>();
+    private readonly HashSet<Employee> testers = new HashSet<Employee>();
 
     public State CurrentState {
         get {
