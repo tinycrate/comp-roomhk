@@ -19,7 +19,8 @@ public class Team {
     public float DevOpsKnowledge => 0.25f * TeamTestingKnowledge + 0.25f * TeamOperationKnowledge +
                                     0.25f * TeamReleaseEngKnowledge + 0.25f * TeamAutomationKnowledge;
 
-    public List<Employee> Members { get; } = new List<Employee>();
+    private readonly List<Employee> members = new List<Employee>();
+    public List<Employee> CurrentMembers => new List<Employee>(members);
     
 
     // Gives bonus based on the team knowledge, should be called once per day
@@ -27,10 +28,10 @@ public class Team {
         var knowledge = new[] {TeamTestingKnowledge, TeamOperationKnowledge, TeamReleaseEngKnowledge, TeamAutomationKnowledge};
         Array.Sort(knowledge);
         var knowledgeBonus = knowledge[0] * 0.35f + knowledge[1] * 0.35f + knowledge[2] * 0.15f + knowledge[3] * 0.15f;
-        TeamTestingKnowledge += Members.Select(x => x.TestingSkills).Sum() * KnowledgeAwardFactor;
-        TeamOperationKnowledge += Members.Select(x => x.OperationSkills).Sum() * KnowledgeAwardFactor;
-        TeamReleaseEngKnowledge += Members.Select(x => x.ReleaseEngSkills).Sum() * KnowledgeAwardFactor;
-        TeamAutomationKnowledge += Members.Select(x => x.AutomationSkills).Sum() * KnowledgeAwardFactor;
+        TeamTestingKnowledge += members.Select(x => x.TestingSkills).Sum() * KnowledgeAwardFactor;
+        TeamOperationKnowledge += members.Select(x => x.OperationSkills).Sum() * KnowledgeAwardFactor;
+        TeamReleaseEngKnowledge += members.Select(x => x.ReleaseEngSkills).Sum() * KnowledgeAwardFactor;
+        TeamAutomationKnowledge += members.Select(x => x.AutomationSkills).Sum() * KnowledgeAwardFactor;
         TeamTestingKnowledge *= 1f + knowledgeBonus * BonusFactor;
         TeamOperationKnowledge *= 1f + knowledgeBonus * BonusFactor;
         TeamReleaseEngKnowledge *= 1f + knowledgeBonus * BonusFactor;
@@ -41,10 +42,28 @@ public class Team {
         TeamAutomationKnowledge = Mathf.Clamp(TeamAutomationKnowledge, 0.01f, 1f);
     }
 
+    public void AddMember(Employee employee) {
+        employee.AssignedTeam?.RemoveMember(employee);
+        members.Add(employee);
+        employee.AssignedTeam = this;
+    }
+
+    public void RemoveMember(Employee employee) {
+        // Tries to remove employee
+        if (!members.Remove(employee)) {
+            Debug.LogError($"Team: Failed to remove {employee.Name}, employee not in team,");
+        }
+        if (employee.AssignedTeam == this) {
+            employee.AssignedTeam = null;
+        } else {
+            Debug.LogError($"Inconsistency detected: Employee claims to be assigned to a different team. The employee will continue to reference that team");
+        }
+    }
+
     public void DebugTeamInteractive() {
         Console.WriteLine($"Team: Test {TeamTestingKnowledge}, Oper {TeamOperationKnowledge}, Release {TeamReleaseEngKnowledge}, Automate {TeamAutomationKnowledge}");
         Console.WriteLine($"DevOps knowledge: {DevOpsKnowledge}");
-        Console.WriteLine($"Members: Test {Members.Select(x => x.TestingSkills).Sum()}, Oper {Members.Select(x => x.OperationSkills).Sum()}, Release {Members.Select(x => x.ReleaseEngSkills).Sum()}, Automate {Members.Select(x => x.AutomationSkills).Sum()}");
+        Console.WriteLine($"Members: Test {members.Select(x => x.TestingSkills).Sum()}, Oper {members.Select(x => x.OperationSkills).Sum()}, Release {members.Select(x => x.ReleaseEngSkills).Sum()}, Automate {members.Select(x => x.AutomationSkills).Sum()}");
     }
 
 }
