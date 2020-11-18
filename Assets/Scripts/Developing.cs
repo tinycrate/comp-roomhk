@@ -61,8 +61,6 @@ public class Developing : MonoBehaviour
         if (test_pass.Length != SIZE) { Array.Resize(ref test_pass, SIZE); }
         if (merge.Length != SIZE) { Array.Resize(ref merge, SIZE); }
         if (merge_progress.Length != SIZE) { Array.Resize(ref merge_progress, SIZE); }
-
-
     }
 
     // Start is called before the first frame update
