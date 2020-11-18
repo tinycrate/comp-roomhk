@@ -10,14 +10,25 @@ public class Team {
     public float BonusFactor { get; set; } = Constants.KnowledgeBonusFactor;
     public float KnowledgeAwardFactor { get; set; } = Constants.KnowledgeAwardFactor;
 
-    public float TeamTestingKnowledge { get; private set; } = 0.01f;
-    public float TeamOperationKnowledge { get; private set; } = 0.01f;
-    public float TeamReleaseEngKnowledge { get; private set; } = 0.01f;
-    public float TeamAutomationKnowledge { get; private set; } = 0.01f;
-
-
-    public float DevOpsKnowledge => 0.25f * TeamTestingKnowledge + 0.25f * TeamOperationKnowledge +
-                                    0.25f * TeamReleaseEngKnowledge + 0.25f * TeamAutomationKnowledge;
+    private readonly TeamKnowledge teamKnowledge = new TeamKnowledge();
+    public TeamKnowledge KnowledgeSnapshot => new TeamKnowledge(teamKnowledge);
+    public float TeamTestingKnowledge {
+        get => teamKnowledge.TeamTestingKnowledge;
+        private set => teamKnowledge.TeamTestingKnowledge = value;
+    }
+    public float TeamOperationKnowledge {
+        get => teamKnowledge.TeamOperationKnowledge;
+        private set => teamKnowledge.TeamOperationKnowledge = value;
+    }
+    public float TeamReleaseEngKnowledge {
+        get => teamKnowledge.TeamReleaseEngKnowledge;
+        private set => teamKnowledge.TeamReleaseEngKnowledge = value;
+    }
+    public float TeamAutomationKnowledge {
+        get => teamKnowledge.TeamAutomationKnowledge;
+        private set => teamKnowledge.TeamAutomationKnowledge = value;
+    }
+    public float DevOpsKnowledge => teamKnowledge.DevOpsKnowledge;
 
     private readonly List<Employee> members = new List<Employee>();
     public List<Employee> CurrentMembers => new List<Employee>(members);
