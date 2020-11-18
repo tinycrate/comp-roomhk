@@ -36,7 +36,6 @@ public class Developing : MonoBehaviour
     [Header("Build")]
     public Text[] build = new Text[SIZE];
     public tick_cross_option[] build_progress = new tick_cross_option[SIZE];
-    //public bool[] build_progress = new bool[SIZE];
     
     // Test progress
     [Header("Test")]
@@ -44,13 +43,10 @@ public class Developing : MonoBehaviour
     [Range(0, 1)] public float[] test_progress = new float[SIZE];
     public bool[] test_pass = new bool[SIZE];
 
-
     // Merge progress
     [Header("Merge")]
     public Text[] merge = new Text[SIZE];
     public tick_cross_option[] merge_progress = new tick_cross_option[SIZE];
-    //public bool[] merge_progress = new bool[SIZE];
-
 
     void OnValidate() {
         if (feature.Length != SIZE) { Array.Resize(ref feature, SIZE); }
