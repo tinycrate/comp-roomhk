@@ -16,7 +16,7 @@ public class Feature {
     public String Name { get; private set; }
     public float Effort { get;}
     public float RemainingEffort { get; private set; }
-    public float UnitTestEffort => Effort * 0.2f * (1f + Difficulty);
+    public float UnitTestEffort => Effort * Constants.UnitTestEffortPercentage * (1f + Difficulty);
     public float RemainingUnitTestEffort { get; private set; }
     public bool BuildFailed { get; private set; } = false;
     public bool TestFailed { get; private set; } = false;
@@ -71,10 +71,12 @@ public class Feature {
         if (RemainingEffort <= Mathf.Epsilon) {
             var buildSuccessBonus = Mathf.Min(1f, coders.Sum(x => x.Experience) / (Constants.MaxRequiredExperiencePoints * Difficulty));
             var advanceProbability = BaseBuildSuccessProbability + (1 - BaseBuildSuccessProbability) * buildSuccessBonus;
+            GameManager.GetInstance.StatManager.TotalBuildCount += 1;
             if (Random.value > advanceProbability) {
                 RemainingEffort = Effort * Constants.BuildFailEffortPenalty;
                 BuildFailed = true;
                 TestFailed = false;
+                GameManager.GetInstance.StatManager.BuildFailureCount += 1;
                 OnBuildFailed?.Invoke(this, EventArgs.Empty);
             } else {
                 BuildFailed = false;
@@ -105,11 +107,13 @@ public class Feature {
                 employee.AssignedTeam.TeamTestingKnowledge
             );
             var advanceProbability = BaseTestSuccessProbability + (1 - BaseTestSuccessProbability) * testSuccessBonus;
+            GameManager.GetInstance.StatManager.TotalTestCount += 1;
             if (Random.value > advanceProbability) {
-                RemainingUnitTestEffort = UnitTestEffort;
+                RemainingUnitTestEffort = UnitTestEffort * Constants.TestFailTestEffortPenalty;
                 RemainingEffort = Effort * Constants.TestFailEffortPenalty;
                 TestFailed = true;
                 BuildFailed = false;
+                GameManager.GetInstance.StatManager.TestFailureCount += 1;
                 OnTestFailed?.Invoke(this, EventArgs.Empty);
             } else {
                 BuildFailed = false;
