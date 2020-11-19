@@ -24,4 +24,9 @@ public class Outage {
         var MTTR = CalculateMTTR(outages);
         return MTTF / (MTTF + MTTR);
     }
+
+    public Outage(float timeToRepair, float timeToFailure) {
+        TimeToRepair = timeToRepair;
+        TimeToFailure = timeToFailure;
+    }
 }

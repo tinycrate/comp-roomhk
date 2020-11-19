@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class GameStatManager : IGameStat {
 
-    public int DayPassed { get; private set; } = 0;
+    public float DayPassed { get; private set; } = 0;
     public List<GameStatSnapshot> Snapshots { get; } = new List<GameStatSnapshot>();
 
     public List<Outage> Outages { get; } = new List<Outage>(); // Contains all (M)TTR, (M)TTF values and availability
@@ -14,8 +14,6 @@ public class GameStatManager : IGameStat {
 
     public int TotalChangesToProduction { get; set; } = 0;
     public int FailedChangesToProduction { get; set; } = 0;
-
-    public float UserSatisfaction { get; set; } = 0;
 
     public int TotalBuildCount { get; set; } = 0;
     public int TotalTestCount { get; set; } = 0;
@@ -26,6 +24,8 @@ public class GameStatManager : IGameStat {
 
     public float TaskCompletionPercentage => 
         CompletedTasks.Sum(x => x.Features.Sum(y => y.Effort * y.Difficulty)) / totalTaskEffort;
+
+    public float UserSatisfaction => GameManager.GetInstance.DeployedServices.Sum(x => x.TotalSatisfaction);
 
     public float MTTR => Outage.CalculateMTTR(Outages);
     public float MTTF => Outage.CalculateMTTF(Outages);
