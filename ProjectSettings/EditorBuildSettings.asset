@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/Staged/Landing.unity
+    guid: fd6488fa16bdb494391ceb7deda28335
   m_configObjects: {}

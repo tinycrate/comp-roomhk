@@ -16,14 +16,16 @@ public abstract class MonoBehaviourSingleton<T> : MonoBehaviour where T : MonoBe
     }
 
     void Awake () {
-        if(GetInstance == null) {
+        if (instance == null) {
             instance = this;
-            DontDestroyOnLoad(gameObject);
+            AfterAwake();
         }
         else {
-            Debug.LogError($"Attempted to initialize a {this.GetType().Name} that already exist in the game, destroying...");
+            Debug.Log($"Attempted to initialize a {this.GetType().Name} that already exist in the game, destroying...");
             Destroy(this);
         }
     }
 
+    // Called only when the object is initialized and not destroyed
+    protected virtual void AfterAwake() {}
 }

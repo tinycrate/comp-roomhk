@@ -68,6 +68,7 @@ class DeployableTask : ITask, IDeployable {
                 Deployed = true;
                 GameManager.GetInstance.StatManager.LeadTimes.Add(LeadTime);
                 OnDeployed?.Invoke(this, EventArgs.Empty);
+                OnTaskCompleted?.Invoke(this, EventArgs.Empty);
             }
             return;
         };

@@ -3,16 +3,19 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
+[Serializable]
 public class Employee {
-    public String Name { get; private set; }
-    public int Cost { get; private set; }
-    public float Efficiency { get; private set; }
-    public float Experience { get; private set; }
-    public float TestingSkills { get; private set; }
-    public float OperationSkills { get; private set; }
-    public float ReleaseEngSkills { get; private set; }
-    public float AutomationSkills { get; private set; }
+    public String Name;
+    public int Cost;
+    [Range(0, 1)] public float Efficiency;
+    [Range(0, 1)] public float Experience;
+    [Range(0, 1)] public float TestingSkills;
+    [Range(0, 1)] public float OperationSkills;
+    [Range(0, 1)] public float ReleaseEngSkills;
+    [Range(0, 1)] public float AutomationSkills;
+    public Image Image;
     public List<Feature> AssignedFeatures { get; } = new List<Feature>();
     public Team AssignedTeam { get; set; }
 
@@ -50,15 +53,5 @@ public class Employee {
                 }
             }
         }
-    }
-
-    public static List<Employee> GetDefaultList() {
-        return new List<Employee> {
-            new Employee("Peter", 6000, 0.8f, 0.5f, 0.7f, 0.7f, 0.4f, 0.5f),
-            new Employee("Amy", 3000, 0.5f, 0.4f, 0.1f, 0.9f, 0.3f, 0.5f),
-            new Employee("James", 2000, 0.3f, 0.5f, 0.4f, 0.5f, 0.4f, 0.5f),
-            new Employee("Derek", 4000, 0.2f, 0.8f, 0.5f, 0.3f, 0.8f, 0.8f),
-            new Employee("Evan", 5000, 0.2f, 0.9f, 0.8f, 0.8f, 0.6f, 0.2f)
-        };
     }
 }
