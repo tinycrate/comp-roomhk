@@ -35,10 +35,17 @@ public class Constants {
         (GameManager.GetInstance.SelectedSourceControl == GameManager.SourceControlMode.GitFlow) ? 2f : 2.2f;
     public static float MaxRequiredTestingPoints => 
         (GameManager.GetInstance.SelectedSourceControl == GameManager.SourceControlMode.GitFlow) ? 2.5f : 2.8f;
-    // Core Service
-    public const float CoreFeatureSatisfactionValue = 80;
     // Deployment
     public const float LeastDeploySuccessProbability = 0.4f; // The minimum probability a deployment is successful
     public const float LeastDeployedServiceReliability = 0.6f; // The minimum probability a deployed service will introduce a defect in a day
+    // Production
+    public const float BaseProductionSatisfactionValue = 80;
+    public const float BaseProductionQuality = 0.98f;
+    public const float MaxProductionQualityPunishment = 0.15f;
+    public const float ProductionQualityPunishmentPerDefect = 0.005f;
+    public const float MaxDowntimeReductionBonus = 0.5f;
+    // Deployed Services
+    public const float MaxDeployableSatisfactionPunishment = 0.8f;
+    public const float DeployableSatisfactionPunishmentPerDefect = 0.08f;
 }
 

@@ -17,8 +17,21 @@ class DeployableTask : ITask, IDeployable {
     public bool Started => Features.Any(x => x.CurrentState != Feature.State.Idle);
     public float LeadTime { get; private set; }
     public event EventHandler OnTaskCompleted;
+    public event EventHandler<float> OnSatisfactionChange;
     public bool Deployed { get; private set; } = false;
-    public float TotalSatisfaction { get; set; } = 0;
+
+    private float totalSatisfaction = 0;
+    public float TotalSatisfaction {
+        get => totalSatisfaction;
+        set {
+            var diff = value - totalSatisfaction;
+            totalSatisfaction = value;
+            if (diff < Mathf.Epsilon) {
+                OnSatisfactionChange?.Invoke(this, diff);
+            }
+        }
+    }
+
     public int ProductionDefectCount { get; private set; }
     public event EventHandler OnProductionDefect;
     public event EventHandler OnDeploymentFailure;
@@ -65,7 +78,10 @@ class DeployableTask : ITask, IDeployable {
             GameManager.GetInstance.StatManager.TotalProductionDefects += 1;
             OnProductionDefect?.Invoke(this, EventArgs.Empty);
         } else {
-            TotalSatisfaction += EndProductQuality * Value;
+            TotalSatisfaction += EndProductQuality * Value * Mathf.Min(
+                                     Constants.MaxDeployableSatisfactionPunishment,
+                                     Constants.DeployableSatisfactionPunishmentPerDefect * ProductionDefectCount
+                                 );
         }
     }
 
