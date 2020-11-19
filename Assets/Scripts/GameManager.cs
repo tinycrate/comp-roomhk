@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviourSingleton<GameManager> {
     public enum SourceControlMode {
@@ -27,8 +28,16 @@ public class GameManager : MonoBehaviourSingleton<GameManager> {
     public Production ProductionService { get; private set; }
     public List<IDeployable> DeployedServices { get; private set; }
 
+    protected override void AfterAwake() {
+        DontDestroyOnLoad(gameObject);
+    }
+
     public void SetTeam(Team team) {
         CurrentTeam = team;
+    }
+
+    public void NextScene() {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
     public void StartSimulation() {

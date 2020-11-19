@@ -1,38 +1,41 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class AbilityHexagon : MonoBehaviour
-{
-
-    [SerializeField]
-    private Image[] m_triangles;
-    [SerializeField]
-    private float m_fullSize = 100f;
-    [SerializeField]
-    private float[] m_statusValues;
-
-    void OnValidate() {
-        if (m_statusValues.Length != m_triangles.Length) {
-            return;
-        }
-
-        for (int i = 0; i < 6; i++) {
-            SetValue (i, m_statusValues[i]);
-        }
+[ExecuteInEditMode]
+public class AbilityHexagon : MonoBehaviour {
+    [Serializable]
+    public class Stat {
+        public Text DisplayText;
+        public Image Triangle;
+        public float Value;
+        public String TextValue;
     }
 
-    public void SetValue (int index, float value) {
-        m_statusValues[index] = value;
+    public Stat[] Stats = new Stat[6];
 
-        Vector2 size = m_triangles[index].rectTransform.sizeDelta;
-        size.x = m_fullSize * value;
-        m_triangles[index].rectTransform.sizeDelta = size;
+    public float FullSize = 100f;
 
-        int pre = (index + m_triangles.Length - 1) % m_triangles.Length;
-        size = m_triangles[pre].rectTransform.sizeDelta;
-        size.y = m_fullSize * value;
-        m_triangles[pre].rectTransform.sizeDelta = size;
+    void Update() {
+        SetDisplay();
+    }
+
+    void SetDisplay() {
+        for (var i = 0; i < Stats.Length; i++) {
+            if (Stats[i] == null || Stats[i].Triangle == null) continue;
+            if (Stats[i].DisplayText != null) {
+                Stats[i].DisplayText.text = Stats[i].TextValue;
+            }
+            Vector2 size = Stats[i].Triangle.rectTransform.sizeDelta;
+            size.x = FullSize * Stats[i].Value;
+            Stats[i].Triangle.rectTransform.sizeDelta = size;
+            var pre = (i + Stats.Length - 1) % Stats.Length;
+            size = Stats[pre].Triangle.rectTransform.sizeDelta;
+            size.y = FullSize * Stats[i].Value;
+            Stats[pre].Triangle.rectTransform.sizeDelta = size;
+        }
     }
 }
