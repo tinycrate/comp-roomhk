@@ -784,7 +784,6 @@ GameObject:
   - component: {fileID: 7859199257733266423}
   - component: {fileID: 7859199257733266425}
   - component: {fileID: 7859199257733266424}
-  - component: {fileID: 7859199257733266426}
   m_Layer: 5
   m_Name: task_name
   m_TagString: Untagged
@@ -852,53 +851,6 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: Task 1
---- !u!114 &7859199257733266426
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7859199257733266422}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6272435179e415543bcb4b96c05d23cc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  task_name: {fileID: 0}
-  task_text: 
-  feature:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  feature_text:
-  - 
-  - 
-  - 
-  release_bar: {fileID: 0}
-  deploy_bar: {fileID: 0}
-  deploy_progress: 0
-  release_progress: 0
-  code:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  code_progress: 000000000000000000000000
-  build:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  build_progress: 000000
-  test:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  test_progress: 000000000000000000000000
-  test_pass: 000000
-  merge:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  merge_progress: 000000
 --- !u!1 &7859199257757393378
 GameObject:
   m_ObjectHideFlags: 0
@@ -910,7 +862,7 @@ GameObject:
   - component: {fileID: 7859199257757393379}
   - component: {fileID: 7859199257757393380}
   m_Layer: 5
-  m_Name: Develop 1
+  m_Name: Develop
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -984,23 +936,29 @@ MonoBehaviour:
   - {fileID: 7859199257198316887}
   - {fileID: 7859199258435038022}
   - {fileID: 7859199257161522163}
-  code_progress: 000000000000000000000000
+  code_progress:
+  - 0
+  - 0
+  - 0
   build:
   - {fileID: 7859199257615945841}
   - {fileID: 7859199258621884225}
   - {fileID: 7859199257595105294}
-  build_progress: 000000
+  build_progress: 000000000000000000000000
   test:
   - {fileID: 7859199258448729943}
   - {fileID: 7859199257884166984}
   - {fileID: 7859199256592225290}
-  test_progress: 000000000000000000000000
+  test_progress:
+  - 0
+  - 0
+  - 0
   test_pass: 000000
   merge:
   - {fileID: 7859199258621800870}
   - {fileID: 7859199257812003508}
   - {fileID: 7859199256622690018}
-  merge_progress: 000000
+  merge_progress: 000000000000000000000000
 --- !u!1 &7859199257812003506
 GameObject:
   m_ObjectHideFlags: 0
