@@ -21,7 +21,7 @@ public abstract class MonoBehaviourSingleton<T> : MonoBehaviour where T : MonoBe
             AfterAwake();
         }
         else {
-            Debug.Log($"Attempted to initialize a {this.GetType().Name} that already exist in the game, destroying...");
+            Debug.Log($"Using an existing {this.GetType().Name} that already exist in the game instead of the current one...");
             Destroy(this);
         }
     }
