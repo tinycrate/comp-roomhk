@@ -12,7 +12,7 @@ public class LandingSceneManager : MonoBehaviour {
 
     private IEnumerator StartGameRoutine() {
         SceneExitAnimator.SetTrigger("Start");
-        while (SceneExitAnimator.GetCurrentAnimatorStateInfo(0).IsName("End")) yield return null;
+        while (!SceneExitAnimator.GetCurrentAnimatorStateInfo(0).IsName("End")) yield return null;
         GameManager.GetInstance.NextScene();
     }
 }

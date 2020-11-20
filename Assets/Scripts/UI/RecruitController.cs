@@ -19,8 +19,12 @@ public class RecruitController : MonoBehaviour {
     public Text BudgetText;
     public AbilityHexagon AbilityHexagon;
 
+    [Header("Action")] 
+    public Button NextButton;
+
     [Header("Parameters")] 
     public float Budget;
+    public int MinimumSelectedEmployee = 3;
     public Employee[] Employees = new Employee[9];
 
     public List<Employee> Selected { get; } = new List<Employee>();
@@ -77,6 +81,7 @@ public class RecruitController : MonoBehaviour {
     void Start() {
         UnselectedQueue = new List<Employee>(Employees);
         ArrangeEmployees();
+        NextButton.onClick.AddListener(()=> { TeamSelectSceneManager.GetInstance.ConfirmSelection(Selected); });
     }
 
     // Update is called once per frame
@@ -124,14 +129,10 @@ public class RecruitController : MonoBehaviour {
             );
             pos++;
         }
+        NextButton.gameObject.SetActive(Selected.Count >= MinimumSelectedEmployee);
     }
 
     private Employee FindEmployee(Image employeeImage) {
-        foreach (var employee in Employees) {
-            if (employee != null && employee.Image == employeeImage) {
-                return employee;
-            }
-        }
-        return null;
+        return Employees.FirstOrDefault(employee => employee != null && employee.Image == employeeImage);
     }
 }

@@ -8,4 +8,22 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Staged/Landing.unity
     guid: fd6488fa16bdb494391ceb7deda28335
+  - enabled: 1
+    path: Assets/Scenes/Staged/InfoSlides/InfoSlide0.unity
+    guid: 3ff0b2480f252b9498e98248936db314
+  - enabled: 1
+    path: Assets/Scenes/Staged/InfoSlides/InfoSlide1.unity
+    guid: 1736402fae58070419bf777fc37107d2
+  - enabled: 1
+    path: Assets/Scenes/Staged/InfoSlides/InfoSlide2.unity
+    guid: 4cf860e265775d24788a2c8777e11705
+  - enabled: 1
+    path: Assets/Scenes/Staged/InfoSlides/InfoSlide3.unity
+    guid: d94a00b0488391247a7405d433f86285
+  - enabled: 1
+    path: Assets/Scenes/Staged/TeamSelect.unity
+    guid: 34bf2ca2256a71e4a99b02ecc0100f83
+  - enabled: 1
+    path: Assets/Scenes/Staged/MainGame.unity
+    guid: 90d92b847efebaa41afdc096f0549f1c
   m_configObjects: {}
