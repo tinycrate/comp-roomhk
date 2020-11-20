@@ -30,6 +30,8 @@ public class RecruitController : MonoBehaviour {
     public float RemainingBudget => Budget - Selected.Sum(x => x.Cost);
     private float displayingRemainingBudget = 0;
 
+    private List<Employee> UnselectedQueue { get; set; }
+
     private enum AbilityHexParams {
         Operation = 0,
         Testing = 1,
@@ -54,23 +56,26 @@ public class RecruitController : MonoBehaviour {
     }
 
     public void ShowStatistics(Image employeeImage) {
-        var employee = findEmployee(employeeImage);
+        var employee = FindEmployee(employeeImage);
         if (employeeImage != null) ShowingEmployee = employee;
     }
 
     public void ToggleSelection(Image employeeImage) {
-        var employee = findEmployee(employeeImage);
+        var employee = FindEmployee(employeeImage);
         if (employeeImage == null) return;
         if (Selected.Contains(employee)) {
             Selected.Remove(employee);
+            UnselectedQueue.Add(employee);
         } else if (RemainingBudget >= employee.Cost) {
             Selected.Add(employee);
+            UnselectedQueue.Remove(employee);
         }
         ArrangeEmployees();
     }
 
     // Start is called before the first frame update
     void Start() {
+        UnselectedQueue = new List<Employee>(Employees);
         ArrangeEmployees();
     }
 
@@ -102,10 +107,10 @@ public class RecruitController : MonoBehaviour {
         var xStep = SlotAnchorCornerRight.anchoredPosition.x - SlotAnchorCornerLeft.anchoredPosition.x;
         var yStep = SlotAnchorCornerRight.anchoredPosition.y - SlotAnchorCornerLeft.anchoredPosition.y;
         var pos = 0;
-        foreach (var employee in Employees.Where(x=>!Selected.Contains(x))) {
+        foreach (var employee in UnselectedQueue) {
             employee.Image.gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(
-                SlotAnchorCornerLeft.anchoredPosition.x + xStep * (int)(pos/3),
-                SlotAnchorCornerLeft.anchoredPosition.y + yStep * (pos%3)
+                SlotAnchorCornerLeft.anchoredPosition.x + xStep * (pos%3),
+                SlotAnchorCornerLeft.anchoredPosition.y + yStep * (int)(pos/3)
             );
             pos++;
         }
@@ -121,7 +126,7 @@ public class RecruitController : MonoBehaviour {
         }
     }
 
-    private Employee findEmployee(Image employeeImage) {
+    private Employee FindEmployee(Image employeeImage) {
         foreach (var employee in Employees) {
             if (employee != null && employee.Image == employeeImage) {
                 return employee;
