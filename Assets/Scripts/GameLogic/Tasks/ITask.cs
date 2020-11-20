@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public interface ITask {
-    String Name { get; }
+    string Name { get; }
     List<Feature> Features { get; }
 
     bool Completed { get; }

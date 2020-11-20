@@ -12,7 +12,7 @@ public class AbilityHexagon : MonoBehaviour {
         public Text DisplayText;
         public Image Triangle;
         public float Value;
-        public String TextValue;
+        public string TextValue;
     }
 
     public Stat[] Stats = new Stat[6];

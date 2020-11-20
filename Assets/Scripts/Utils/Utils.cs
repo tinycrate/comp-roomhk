@@ -14,7 +14,7 @@ public static class Utils {
         );
     }
 
-    public static String GetSceneNameByBuildIndex(int buildIndex) {
+    public static string GetSceneNameByBuildIndex(int buildIndex) {
         return Path.GetFileNameWithoutExtension(SceneUtility.GetScenePathByBuildIndex(buildIndex));
     }
 }
