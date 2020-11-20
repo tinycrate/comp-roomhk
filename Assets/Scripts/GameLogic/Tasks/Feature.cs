@@ -13,7 +13,7 @@ public class Feature {
         Testing,
         Merged
     }
-    public String Name { get; private set; }
+    public string Name { get; private set; }
     public float Effort { get;}
     public float RemainingEffort { get; private set; }
     public float UnitTestEffort => Effort * Constants.UnitTestEffortPercentage * (1f + Difficulty);
