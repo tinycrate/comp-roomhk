@@ -58,13 +58,16 @@ public class Feature {
         Difficulty = difficulty;
     }
 
-    // Returns the amount of unconsumed effort
+    // Returns the amount of consumed effort
     public float Code(float codingEffort, Employee employee) {
         coders.Add(employee);
         var oldState = CurrentState;
         if (!RequireCoding) {
             Debug.LogError($"Feature {Name}: Attempts to work on code on a feature that does not require coding.");
-            return codingEffort;
+            return 0;
+        }
+        if (codingEffort <= Mathf.Epsilon) {
+            return 0;
         }
         var consumedEffort = Mathf.Min(codingEffort, RemainingEffort);
         RemainingEffort -= consumedEffort;
@@ -86,16 +89,19 @@ public class Feature {
         if (CurrentState != oldState) {
             OnStateChanged?.Invoke(this, oldState);
         }
-        return codingEffort - consumedEffort;
+        return consumedEffort;
     }
 
-    // Returns the amount of unconsumed effort
+    // Returns the amount of consumed effort
     public float Test(float testingEffort, Employee employee) {
         testers.Add(employee);
         var oldState = CurrentState;
         if (!RequireTesting) {
             Debug.LogError($"Feature {Name}: Attempts to work on test on a feature that does not require testing.");
-            return testingEffort;
+            return 0;
+        }
+        if (testingEffort <= Mathf.Epsilon) {
+            return 0;
         }
         var consumedEffort = Mathf.Min(testingEffort, RemainingUnitTestEffort);
         RemainingUnitTestEffort -= consumedEffort;
@@ -124,7 +130,7 @@ public class Feature {
         if (CurrentState != oldState) {
             OnStateChanged?.Invoke(this, oldState);
         }
-        return testingEffort - consumedEffort;
+        return consumedEffort;
     }
 
     private void FinishFeature() {

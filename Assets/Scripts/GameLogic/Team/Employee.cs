@@ -15,7 +15,7 @@ public class Employee {
     [Range(0, 1)] public float OperationSkills;
     [Range(0, 1)] public float ReleaseEngSkills;
     [Range(0, 1)] public float AutomationSkills;
-    public Image Image;
+    public Sprite Image;
     public List<Feature> AssignedFeatures { get; } = new List<Feature>();
     public Team AssignedTeam { get; set; }
 
@@ -38,18 +38,25 @@ public class Employee {
         }
         var remainingCodingEffort = Constants.GlobalEffortFactor * Efficiency * (1f + AssignedTeam.DevOpsKnowledge);
         var remainingTestingEffort = Constants.GlobalTestEffortFactor * TestingSkills * (1f + AssignedTeam.TeamTestingKnowledge);
-        foreach (var feature in AssignedFeatures.Where(feature => feature.CurrentState != Feature.State.Merged)) {
-            while (feature.RequireCoding || feature.RequireTesting) {
-                if (feature.RequireCoding && remainingCodingEffort <= Mathf.Epsilon) {
-                    break;
-                }
-                if (feature.RequireTesting && remainingTestingEffort <= Mathf.Epsilon) {
-                    break;
-                }
+        while (true) {
+            var features = AssignedFeatures.Where(feature => feature.RequireCoding).ToList();
+            if (features.Count <= 0) break;
+            if (remainingCodingEffort <= Mathf.Epsilon) break;
+            var maxEffortPerFeature = remainingCodingEffort / features.Count;
+            foreach (var feature in features) {
                 if (feature.RequireCoding) {
-                    remainingCodingEffort = feature.Code(remainingCodingEffort, this);
-                } else if (feature.RequireTesting) {
-                    remainingTestingEffort = feature.Test(remainingTestingEffort, this);
+                    remainingCodingEffort -= feature.Code(Mathf.Min(maxEffortPerFeature, remainingCodingEffort), this);
+                }
+            }
+        }
+        while (true) {
+            var features = AssignedFeatures.Where(feature => feature.RequireTesting).ToList();
+            if (features.Count <= 0) break;
+            if (remainingTestingEffort <= Mathf.Epsilon) break;
+            var maxEffortPerFeature = remainingTestingEffort / features.Count;
+            foreach (var feature in features) {
+                if (feature.RequireTesting) {
+                    remainingTestingEffort -= feature.Test(Mathf.Min(maxEffortPerFeature, remainingTestingEffort), this);
                 }
             }
         }

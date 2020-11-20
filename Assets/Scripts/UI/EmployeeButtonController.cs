@@ -4,7 +4,10 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class EmployeeButton : MonoBehaviour {
+public class EmployeeButtonController : MonoBehaviour {
+
+    public string EmployeeName { get; set; }
+
     private Button button;
     private EventTrigger eventTrigger;
 
@@ -15,11 +18,11 @@ public class EmployeeButton : MonoBehaviour {
         var trigger = new EventTrigger.Entry { eventID = EventTriggerType.PointerEnter };
         trigger.callback.AddListener(
             (data) => {
-                TeamSelectSceneManager.GetInstance.RecruitController.ShowStatistics(gameObject.GetComponent<Image>());
+                TeamSelectSceneManager.GetInstance.RecruitController.ShowStatistics(EmployeeName);
             });
         eventTrigger.triggers.Add(trigger);
         button.onClick.AddListener(() => {
-            TeamSelectSceneManager.GetInstance.RecruitController.ToggleSelection(gameObject.GetComponent<Image>());
+            TeamSelectSceneManager.GetInstance.RecruitController.ToggleSelection(EmployeeName);
         });
     }
 
