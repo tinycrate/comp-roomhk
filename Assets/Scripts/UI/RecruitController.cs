@@ -12,6 +12,7 @@ public class RecruitController : MonoBehaviour {
     public RectTransform SlotAnchorCornerRight;
     public RectTransform QueueAnchorLeft;
     public RectTransform QueueAnchorRight;
+    public GameObject EmployeesHoldingObject;
 
     [Header("Display")] 
     public Text NameText;
@@ -36,6 +37,8 @@ public class RecruitController : MonoBehaviour {
 
     private List<Employee> UnselectedQueue { get; set; }
 
+    private readonly List<GameObject> employeeButtons = new List<GameObject>();
+
     private enum AbilityHexParams {
         Operation = 0,
         Testing = 1,
@@ -59,14 +62,14 @@ public class RecruitController : MonoBehaviour {
         }
     }
 
-    public void ShowStatistics(Image employeeImage) {
-        var employee = FindEmployee(employeeImage);
-        if (employeeImage != null) ShowingEmployee = employee;
+    public void ShowStatistics(string employeeName) {
+        var employee = FindEmployee(employeeName);
+        if (employee != null) ShowingEmployee = employee;
     }
 
-    public void ToggleSelection(Image employeeImage) {
-        var employee = FindEmployee(employeeImage);
-        if (employeeImage == null) return;
+    public void ToggleSelection(string employeeName) {
+        var employee = FindEmployee(employeeName);
+        if (employee == null) return;
         if (Selected.Contains(employee)) {
             Selected.Remove(employee);
             UnselectedQueue.Add(employee);
@@ -79,6 +82,14 @@ public class RecruitController : MonoBehaviour {
 
     // Start is called before the first frame update
     void Start() {
+        foreach (var employee in Employees) {
+            var button = Instantiate(SlotAnchorCornerLeft, EmployeesHoldingObject.transform).gameObject;
+            button.name = $"employee_{employee.Name}";
+            button.AddComponent<CanvasRenderer>();
+            button.AddComponent<Image>().sprite = employee.Image;
+            button.AddComponent<EmployeeButtonController>().EmployeeName = employee.Name;
+            employeeButtons.Add(button);
+        }
         UnselectedQueue = new List<Employee>(Employees);
         ArrangeEmployees();
         NextButton.onClick.AddListener(()=> { TeamSelectSceneManager.GetInstance.ConfirmSelection(Selected); });
@@ -113,7 +124,7 @@ public class RecruitController : MonoBehaviour {
         var yStep = SlotAnchorCornerRight.anchoredPosition.y - SlotAnchorCornerLeft.anchoredPosition.y;
         var pos = 0;
         foreach (var employee in UnselectedQueue) {
-            employee.Image.gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(
+            GameObject.Find($"employee_{employee.Name}").GetComponent<RectTransform>().anchoredPosition = new Vector2(
                 SlotAnchorCornerLeft.anchoredPosition.x + xStep * (pos%3),
                 SlotAnchorCornerLeft.anchoredPosition.y + yStep * (int)(pos/3)
             );
@@ -123,7 +134,7 @@ public class RecruitController : MonoBehaviour {
         var xStepQueue = QueueAnchorRight.anchoredPosition.x - QueueAnchorLeft.anchoredPosition.x;
         pos = 0;
         foreach (var employee in Selected) {
-            employee.Image.gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(
+            GameObject.Find($"employee_{employee.Name}").GetComponent<RectTransform>().anchoredPosition = new Vector2(
                 QueueAnchorLeft.anchoredPosition.x + xStepQueue * pos,
                 QueueAnchorLeft.anchoredPosition.y
             );
@@ -132,7 +143,7 @@ public class RecruitController : MonoBehaviour {
         NextButton.gameObject.SetActive(Selected.Count >= MinimumSelectedEmployee);
     }
 
-    private Employee FindEmployee(Image employeeImage) {
-        return Employees.FirstOrDefault(employee => employee != null && employee.Image == employeeImage);
+    private Employee FindEmployee(string employeeName) {
+        return Employees.FirstOrDefault(employee => employee != null && employee.Name == employeeName);
     }
 }
