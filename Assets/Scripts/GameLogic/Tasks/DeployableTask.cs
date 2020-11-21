@@ -12,10 +12,12 @@ class DeployableTask : ITask, IDeployable {
     public List<Feature> Features { get; }
     public float TotalFeatureEffort => Features.Sum(x => x.Effort);
     public float ReleaseEffort => TotalFeatureEffort * Constants.ReleaseEffortPercentage;
+    public float FeatureCompletePercentage { get; private set; } = 0; // This only gets updated every day (tick)
     public float RemainingReleaseEffort { get; set; }
     public bool Completed => Deployed;
     public bool FeaturesCompleted => Features.TrueForAll(x => x.CurrentState == Feature.State.Merged);
     public bool Started => Features.Any(x => x.CurrentState != Feature.State.Idle);
+    public bool Assigned { get; set; } = false;
     public float LeadTime { get; private set; }
     public event EventHandler OnTaskCompleted;
     public event EventHandler<float> OnSatisfactionChange;
@@ -49,9 +51,13 @@ class DeployableTask : ITask, IDeployable {
     public void TickDay() {
         if (!Deployed) {
             if (!FeaturesCompleted) {
-                if (Started) LeadTime += 1;
+                if (Started) {
+                    LeadTime += 1;
+                }
+                FeatureCompletePercentage = 1f - Features.Sum(x => x.RemainingEffort) / TotalFeatureEffort;
                 return;
             }
+            FeatureCompletePercentage = 1f;
             LeadTime += 1;
             RemainingReleaseEffort -= Constants.GlobalReleaseFactor *
                                       (1f + GameManager.GetInstance.CurrentTeam.TeamReleaseEngKnowledge);
@@ -91,6 +97,6 @@ class DeployableTask : ITask, IDeployable {
         Name = name;
         Value = value;
         Features = features;
-        RemainingReleaseEffort = TotalFeatureEffort;
+        RemainingReleaseEffort = ReleaseEffort;
     }
 }

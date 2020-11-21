@@ -53,9 +53,9 @@ public class Feature {
     public Feature(string name, float effort, float difficulty) {
         Name = name;
         Effort = effort;
+        Difficulty = difficulty;
         RemainingEffort = Effort;
         RemainingUnitTestEffort = UnitTestEffort;
-        Difficulty = difficulty;
     }
 
     // Returns the amount of consumed effort
