@@ -11,9 +11,18 @@ public class DeployableTaskEntryController : MonoBehaviour, ITaskEntryController
     public Text TaskNameText;
     public Text EffortText;
     public Text DifficultyText;
-    
+
+    public void Start() {
+        GetComponent<Button>().onClick.AddListener(() => {
+            MainGameSceneManager.GetInstance.ShowTaskPlanning(TaskBeingDisplayed);
+        });
+    }
+
+    private ITask taskBeingDisplayed = null;
     public ITask TaskBeingDisplayed {
+        get => taskBeingDisplayed;
         set {
+            taskBeingDisplayed = value;
             if (value == null) return;
             TaskTypeText.text = "Develop";
             TaskNameText.text = value.Name;
