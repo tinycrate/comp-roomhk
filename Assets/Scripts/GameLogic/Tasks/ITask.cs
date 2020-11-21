@@ -7,6 +7,7 @@ public interface ITask {
     string Name { get; }
     List<Feature> Features { get; }
     bool Compulsory { get; }
+    bool Assigned { get; set; }
     bool Completed { get; }
     event EventHandler OnTaskCompleted;
 }

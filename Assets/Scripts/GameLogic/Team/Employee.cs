@@ -16,7 +16,11 @@ public class Employee {
     [Range(0, 1)] public float ReleaseEngSkills;
     [Range(0, 1)] public float AutomationSkills;
     public Sprite Image;
-    public List<Feature> AssignedFeatures { get; } = new List<Feature>();
+
+    private List<Feature> assignedFeatures = new List<Feature>();
+
+    public List<Feature> AssignedFeatures => assignedFeatures ?? (assignedFeatures = new List<Feature>());
+
     public Team AssignedTeam { get; set; }
 
     public Employee(String name, int cost, float efficiency, float experience, float testingSkills, float operationSkills, float releaseEngSkills, float automationSkills, Sprite image) {

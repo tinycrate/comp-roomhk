@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,11 +12,18 @@ public class TaskListController : MonoBehaviour {
 
     [Header("Task Entry Prefabs")] 
     public GameObject DeployableTaskObject;
+    public GameObject DeployableTaskInProgressObject;
 
-    private List<KeyValuePair<ITask, GameObject>> tasks = new List<KeyValuePair<ITask, GameObject>>();
+    private readonly List<KeyValuePair<ITask, GameObject>> tasks = new List<KeyValuePair<ITask, GameObject>>();
     public IEnumerable<ITask> Tasks => tasks.Select(x => x.Key);
 
     private GameObject unassignedObjectPool;
+
+    public void UpgradeTaskInProgress(ITask task) {
+        var newObject = Instantiate(DeployableTaskInProgressObject, ContainerGameObject.transform);
+        newObject.GetComponent<ITaskEntryController>().TaskBeingDisplayed = task;
+        SwapGameObject(task, newObject);
+    }
 
     public void Start() {
         foreach (var task in GameManager.GetInstance.Tasks) {
@@ -25,6 +33,11 @@ public class TaskListController : MonoBehaviour {
 
     public void AddTask(ITask task) {
         tasks.Add(new KeyValuePair<ITask, GameObject>(task, SpawnObject(task)));
+        UpdateTaskList();
+    }
+
+    public void AddTaskAt(ITask task, int index) {
+        tasks.Insert(index, new KeyValuePair<ITask, GameObject>(task, SpawnObject(task)));
         UpdateTaskList();
     }
 
@@ -39,14 +52,15 @@ public class TaskListController : MonoBehaviour {
         UpdateTaskList();
     }
 
-    public void SwapTask(ITask oldTask, ITask newTask) {
-        var index = tasks.FindIndex(x => x.Key == oldTask);
+    public void SwapGameObject(ITask task, GameObject newObject) {
+        var index = tasks.FindIndex(x => x.Key == task);
         if (index < 0) {
             Debug.LogError("Attempted to swap a task from TaskList that does not exist.");
         } else {
             if (tasks[index].Value != null) Destroy(tasks[index].Value);
-            tasks[index] = new KeyValuePair<ITask, GameObject>(newTask, SpawnObject(newTask));
+            tasks[index] = new KeyValuePair<ITask, GameObject>(task, newObject);
         }
+        UpdateTaskList();
     }
 
     private GameObject SpawnObject(ITask task) {
@@ -66,9 +80,8 @@ public class TaskListController : MonoBehaviour {
     }
 
     private void UpdateTaskList() {
-        var count = 0;
         foreach (var task in tasks.Where(task => task.Value != null)) {
-            task.Value.transform.SetSiblingIndex(count++);
+            task.Value.transform.SetAsLastSibling();
         }
     }
 

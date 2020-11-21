@@ -36,6 +36,21 @@ public class FeaturePlanningController : MonoBehaviour, IMainGameView {
         UpdateTaskDisplay();
     }
 
+    void Start() {
+        ConfirmButton.onClick.AddListener(() => {
+            ConfirmButton.interactable = false;
+            foreach (var featureEntryController in featureEntryControllers) {
+                var feature = featureEntryController.Key;
+                var controller = featureEntryController.Value;
+                foreach (var employee in controller.SelectedEmployees) {
+                    employee.AssignedFeatures.Add(feature);
+                }
+            }
+            SelectedTask.Assigned = true;
+            MainGameSceneManager.GetInstance.OnTaskAssignmentCompleted(this, SelectedTask);
+        });
+    }
+
     private void UpdateTaskDisplay() {
         foreach (Transform child in EmployeeListContainer.transform) {
             Destroy(child.gameObject);

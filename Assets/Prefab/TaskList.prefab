@@ -163,6 +163,7 @@ GameObject:
   - component: {fileID: 5169985144008944447}
   - component: {fileID: 5169985144008944446}
   - component: {fileID: 5169985144008944417}
+  - component: {fileID: 5169985144414505040}
   m_Layer: 5
   m_Name: TaskList
   m_TagString: Untagged
@@ -243,6 +244,27 @@ MonoBehaviour:
   ContainerGameObject: {fileID: 5169985143082945666}
   DeployableTaskObject: {fileID: 1210322321858908732, guid: 0c753df3a962de74abca2223890b005d,
     type: 3}
+  DeployableTaskInProgressObject: {fileID: 1775865335344402089, guid: 2ac75da934186d242bdff6fa1f265952,
+    type: 3}
+--- !u!95 &5169985144414505040
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5169985144008944419}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 634ff8c7305b2a942a42e1961d92b465, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &5169985144693810353
 GameObject:
   m_ObjectHideFlags: 0
@@ -361,7 +383,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 5169985144979909251}
   m_HandleRect: {fileID: 5169985144979909250}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:

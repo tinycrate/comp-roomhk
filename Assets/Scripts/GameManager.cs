@@ -28,6 +28,8 @@ public class GameManager : MonoBehaviourSingleton<GameManager> {
     public Production ProductionService { get; private set; }
     public List<IDeployable> DeployedServices { get; private set; }
 
+    public event EventHandler AfterDayTick;
+
     protected override void AfterAwake() {
         DontDestroyOnLoad(gameObject);
     }
@@ -49,6 +51,16 @@ public class GameManager : MonoBehaviourSingleton<GameManager> {
         ProductionService = new Production();
         DeployedServices.Add(ProductionService);
         StatManager = new GameStatManager();
+    }
+
+    public void TriggerDayTick() {
+        CurrentTeam.TickBonus();
+        CurrentTeam.CurrentMembers.ForEach(x => x.Work());
+        foreach (var task in Tasks.Where(x=>x is IDeployable)) {
+            ((IDeployable) task).TickDay();
+        }
+        StatManager.EndDay();
+        AfterDayTick?.Invoke(this, EventArgs.Empty);
     }
 
     private void OnTaskDeployed(object sender, EventArgs e) {
