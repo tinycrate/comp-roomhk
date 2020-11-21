@@ -5,7 +5,8 @@ using UnityEngine.UI;
 using System;
 
 public class DevelopProgressController : MonoBehaviour, IMainGameView {
-    [Header("Object Reference Prefixs")]
+    [Header("Object Reference Prefixes")] 
+    public GameObject TextLocation;
     public string CodeTextObjectPrefix = "code_";
     public string BuildTextObjectPrefix = "build_";
     public string TestTextObjectPrefix = "test_";
@@ -76,7 +77,7 @@ public class DevelopProgressController : MonoBehaviour, IMainGameView {
                 0.02f,
                 Time.deltaTime / 0.15f
             );
-            ReleaseBar.fillAmount = percentage;
+            ReleaseBar.fillAmount = progressBarDisplayValue;
         }
     }
 
@@ -99,7 +100,7 @@ public class DevelopProgressController : MonoBehaviour, IMainGameView {
         if (textObjectCache.TryGetValue(textName, out var result)) {
             return result;
         }
-        result = GameObject.Find(textName)?.GetComponent<Text>();
+        result = TextLocation.transform.Find(textName)?.gameObject?.GetComponent<Text>();
         textObjectCache[textName] = result;
         return result;
     }
