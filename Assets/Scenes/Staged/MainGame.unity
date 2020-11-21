@@ -360,6 +360,41 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 102409372}
   m_CullTransparentMesh: 0
+--- !u!1 &134152784
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 134152785}
+  m_Layer: 5
+  m_Name: DraggingContainer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &134152785
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 134152784}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1709973939}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &218227214
 GameObject:
   m_ObjectHideFlags: 0
@@ -415,7 +450,7 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 1
-  m_Spacing: 10
+  m_Spacing: 3
   m_ChildForceExpandWidth: 0
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 0
@@ -850,7 +885,7 @@ PrefabInstance:
     - target: {fileID: 7859199257757393379, guid: 44c6c84bfd04c9541b4656c015fde1ef,
         type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7859199257757393379, guid: 44c6c84bfd04c9541b4656c015fde1ef,
         type: 3}
@@ -1405,6 +1440,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1190124355}
+  - component: {fileID: 1190124356}
   m_Layer: 5
   m_Name: Planning
   m_TagString: Untagged
@@ -1428,13 +1464,32 @@ RectTransform:
   - {fileID: 1407995358}
   - {fileID: 1709973939}
   m_Father: {fileID: 1729581161}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1190124356
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1190124354}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7d51fabaa0bd854188564983aab005e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ParentCanvas: {fileID: 1729581160}
+  EmployeeListContainer: {fileID: 218227214}
+  EmployeeDraggingContainer: {fileID: 134152784}
+  TestSprite1: {fileID: -1962506448422988146, guid: 03608f44add6879449c2488fdc900753,
+    type: 3}
+  TestSprite2: {fileID: -3507798600678722288, guid: 03608f44add6879449c2488fdc900753,
+    type: 3}
 --- !u!1 &1306325537
 GameObject:
   m_ObjectHideFlags: 0
@@ -2024,10 +2079,10 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 10
     m_MaxSize: 51
-    m_Alignment: 0
+    m_Alignment: 1
     m_AlignByGeometry: 0
     m_RichText: 1
-    m_HorizontalOverflow: 0
+    m_HorizontalOverflow: 1
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: =========================
@@ -2067,6 +2122,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1116903356}
+  - {fileID: 134152785}
   m_Father: {fileID: 1190124355}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2167,9 +2223,9 @@ RectTransform:
   m_Children:
   - {fileID: 1912697255}
   - {fileID: 642605050}
+  - {fileID: 409772910}
   - {fileID: 1020669054}
   - {fileID: 1190124355}
-  - {fileID: 409772910}
   - {fileID: 1407257762}
   - {fileID: 1687696031}
   - {fileID: 102409373}
@@ -2630,7 +2686,7 @@ PrefabInstance:
     - target: {fileID: 5169985144008944416, guid: 3b31361835b07504b8b08b1d099103ca,
         type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5169985144008944416, guid: 3b31361835b07504b8b08b1d099103ca,
         type: 3}

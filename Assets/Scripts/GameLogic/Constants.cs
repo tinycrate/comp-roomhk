@@ -35,6 +35,10 @@ public class Constants {
         (GameManager.GetInstance.SelectedSourceControl == GameManager.SourceControlMode.GitFlow) ? 2f : 2.2f;
     public static float MaxRequiredTestingPoints => 
         (GameManager.GetInstance.SelectedSourceControl == GameManager.SourceControlMode.GitFlow) ? 2.5f : 2.8f;
+
+    // Employee working for more than a task
+    public const float WorkMultiplePenalty = 0.1f;
+
     // Deployment
     public const float LeastDeploySuccessProbability = 0.4f; // The minimum probability a deployment is successful
     public const float LeastDeployedServiceReliability = 0.6f; // The minimum probability a deployed service will introduce a defect in a day

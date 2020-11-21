@@ -62,13 +62,11 @@ public class RecruitController : MonoBehaviour {
         }
     }
 
-    public void ShowStatistics(string employeeName) {
-        var employee = FindEmployee(employeeName);
+    public void ShowStatistics(Employee employee) {
         if (employee != null) ShowingEmployee = employee;
     }
 
-    public void ToggleSelection(string employeeName) {
-        var employee = FindEmployee(employeeName);
+    public void ToggleSelection(Employee employee) {
         if (employee == null) return;
         if (Selected.Contains(employee)) {
             Selected.Remove(employee);
@@ -87,7 +85,7 @@ public class RecruitController : MonoBehaviour {
             button.name = $"employee_{employee.Name}";
             button.AddComponent<CanvasRenderer>();
             button.AddComponent<Image>().sprite = employee.Image;
-            button.AddComponent<EmployeeButtonController>().EmployeeName = employee.Name;
+            button.AddComponent<EmployeeButtonController>().Employee = employee;
             employeeButtons.Add(button);
         }
         UnselectedQueue = new List<Employee>(Employees);
@@ -141,9 +139,5 @@ public class RecruitController : MonoBehaviour {
             pos++;
         }
         NextButton.gameObject.SetActive(Selected.Count >= MinimumSelectedEmployee);
-    }
-
-    private Employee FindEmployee(string employeeName) {
-        return Employees.FirstOrDefault(employee => employee != null && employee.Name == employeeName);
     }
 }
