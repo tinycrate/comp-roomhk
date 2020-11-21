@@ -22,7 +22,7 @@ public class GameManager : MonoBehaviourSingleton<GameManager> {
     public SourceControlMode SelectedSourceControl { get; set; } = SourceControlMode.GitFlow;
     public DeploymentMode SelectedDeploymentMode { get; set; } = DeploymentMode.Canary;
 
-    public Team CurrentTeam { get; private set; }
+    public Team CurrentTeam { get; set; }
     public List<ITask> Tasks { get; private set; } = TaskFactory.DefaultList;
 
     public Production ProductionService { get; private set; }
@@ -30,10 +30,6 @@ public class GameManager : MonoBehaviourSingleton<GameManager> {
 
     protected override void AfterAwake() {
         DontDestroyOnLoad(gameObject);
-    }
-
-    public void SetTeam(Team team) {
-        CurrentTeam = team;
     }
 
     public void PreviousScene() {

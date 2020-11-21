@@ -8,6 +8,7 @@ using Random = UnityEngine.Random;
 class DeployableTask : ITask, IDeployable {
     public string Name { get; } // Name of the Task
     public float Value { get; } // How important the task to the users, affect the users' satisfaction
+    public bool Compulsory => true;
     public List<Feature> Features { get; }
     public float TotalFeatureEffort => Features.Sum(x => x.Effort);
     public float ReleaseEffort => TotalFeatureEffort * Constants.ReleaseEffortPercentage;

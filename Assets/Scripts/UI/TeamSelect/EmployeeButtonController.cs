@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class EmployeeButtonController : MonoBehaviour {
 
-    public string EmployeeName { get; set; }
+    public Employee Employee { get; set; }
 
     private Button button;
     private EventTrigger eventTrigger;
@@ -18,11 +18,11 @@ public class EmployeeButtonController : MonoBehaviour {
         var trigger = new EventTrigger.Entry { eventID = EventTriggerType.PointerEnter };
         trigger.callback.AddListener(
             (data) => {
-                TeamSelectSceneManager.GetInstance.RecruitController.ShowStatistics(EmployeeName);
+                TeamSelectSceneManager.GetInstance.RecruitController.ShowStatistics(Employee);
             });
         eventTrigger.triggers.Add(trigger);
         button.onClick.AddListener(() => {
-            TeamSelectSceneManager.GetInstance.RecruitController.ToggleSelection(EmployeeName);
+            TeamSelectSceneManager.GetInstance.RecruitController.ToggleSelection(Employee);
         });
     }
 

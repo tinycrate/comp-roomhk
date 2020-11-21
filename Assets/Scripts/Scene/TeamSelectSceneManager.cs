@@ -11,7 +11,7 @@ public class TeamSelectSceneManager : MonoBehaviourSingleton<TeamSelectSceneMana
     public void ConfirmSelection(List<Employee> selected) {
         var team = new Team();
         selected.ForEach(x => team.AddMember(x));
-        GameManager.GetInstance.SetTeam(team);
+        GameManager.GetInstance.CurrentTeam = team;
         StartCoroutine(OnConfirmSelection());
     }
 

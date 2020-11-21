@@ -19,7 +19,7 @@ public class Employee {
     public List<Feature> AssignedFeatures { get; } = new List<Feature>();
     public Team AssignedTeam { get; set; }
 
-    public Employee(String name, int cost, float efficiency, float experience, float testingSkills, float operationSkills, float releaseEngSkills, float automationSkills) {
+    public Employee(String name, int cost, float efficiency, float experience, float testingSkills, float operationSkills, float releaseEngSkills, float automationSkills, Sprite image) {
         Name = name;
         Cost = cost;
         Efficiency = efficiency;
@@ -28,6 +28,7 @@ public class Employee {
         OperationSkills = operationSkills;
         ReleaseEngSkills = releaseEngSkills;
         AutomationSkills = automationSkills;
+        Image = image;
     }
 
     // Work on the assigned feature, should be called once per day
@@ -45,7 +46,9 @@ public class Employee {
             var maxEffortPerFeature = remainingCodingEffort / features.Count;
             foreach (var feature in features) {
                 if (feature.RequireCoding) {
-                    remainingCodingEffort -= feature.Code(Mathf.Min(maxEffortPerFeature, remainingCodingEffort), this);
+                    var consumedEffort = feature.Code(Mathf.Min(maxEffortPerFeature, remainingCodingEffort), this);
+                    remainingCodingEffort -= consumedEffort * (1f + Constants.WorkMultiplePenalty * features.Count);
+                    if (remainingCodingEffort <= Mathf.Epsilon) remainingCodingEffort = 0;
                 }
             }
         }
@@ -56,7 +59,9 @@ public class Employee {
             var maxEffortPerFeature = remainingTestingEffort / features.Count;
             foreach (var feature in features) {
                 if (feature.RequireTesting) {
-                    remainingTestingEffort -= feature.Test(Mathf.Min(maxEffortPerFeature, remainingTestingEffort), this);
+                    var consumedEffort = feature.Test(Mathf.Min(maxEffortPerFeature, remainingTestingEffort), this);
+                    remainingTestingEffort -= consumedEffort * (1f + Constants.WorkMultiplePenalty * features.Count);
+                    if (remainingTestingEffort <= Mathf.Epsilon) remainingTestingEffort = 0;
                 }
             }
         }

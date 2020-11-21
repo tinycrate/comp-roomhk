@@ -22,8 +22,9 @@ public class GameStatManager : IGameStat {
     public int TotalProductionDefects { get; set; } = 0;
 
 
-    public float TaskCompletionPercentage => 
-        CompletedTasks.Sum(x => x.Features.Sum(y => y.Effort * y.Difficulty)) / totalTaskEffort;
+    public float TaskCompletionPercentage =>
+        CompletedTasks.Where(x => x.Compulsory).Sum(x => x.Features.Sum(y => y.Effort * y.Difficulty)) /
+        totalTaskEffort;
 
     public float UserSatisfaction => GameManager.GetInstance.DeployedServices.Sum(x => x.TotalSatisfaction);
 
@@ -41,7 +42,8 @@ public class GameStatManager : IGameStat {
 
     public IEnumerable<ITask> CompletedTasks => GameManager.GetInstance.Tasks.Where(x => x.Completed);
 
-    private readonly float totalTaskEffort = TaskFactory.DefaultList.Sum(x => x.Features.Sum(y => y.Effort * y.Difficulty));
+    private readonly float totalTaskEffort = TaskFactory.DefaultList.Where(x => x.Compulsory)
+        .Sum(x => x.Features.Sum(y => y.Effort * y.Difficulty));
 
     public void EndDay() {
         DayPassed += 1;
