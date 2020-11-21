@@ -3,8 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using System.Linq;
 
-public class FeaturePlanningController : MonoBehaviour {
+public class FeaturePlanningController : MonoBehaviour, IMainGameView {
+    public Animator Animator => GetComponent<Animator>();
+    public GameObject CurrentGameObject => gameObject;
+
+    [Header("Control")] 
+    public Button ConfirmButton;
 
     [Header("Displaying")]
     public Text TaskNameText;
@@ -40,7 +46,7 @@ public class FeaturePlanningController : MonoBehaviour {
             newObject.transform.SetParent(EmployeeListContainer.transform, false);
             newObject.GetComponent<RectTransform>().localScale = new Vector3(0.85f, 0.85f);
         }
-        foreach (Transform child in FeatureEntryContainer.transform) {
+        foreach (var child in featureEntryControllers.Values) {
             Destroy(child.gameObject);
         }
         featureEntryControllers.Clear();
@@ -48,31 +54,14 @@ public class FeaturePlanningController : MonoBehaviour {
         foreach (var feature in SelectedTask.Features) {
             var newObject = Instantiate(FeatureEntryPrefab, FeatureEntryContainer.transform, false);
             var controller = newObject.GetComponent<FeatureEntryController>();
+            controller.OnSelectionChanged += OnSelectionChanged;
             controller.SetFeature(feature, index++);
             featureEntryControllers[feature] = controller;
         }
         TaskNameText.text = SelectedTask.Name;
     }
 
-    [Header("Debug")]
-    public Sprite TestSprite1;
-    public Sprite TestSprite2;
-
-    public void Start() {
-        DebugFromEditorPlay();
-    }
-
-    private void DebugFromEditorPlay() {
-        if (Application.isEditor && GameManager.GetInstance.CurrentTeam == null) {
-            GameManager.GetInstance.CurrentTeam = new Team();
-            var list = new List<Employee> {
-                new Employee("TEST1", 0, 0, 0, 0, 0, 0, 0, TestSprite1),
-                new Employee("TEST2", 0, 0, 0, 0, 0, 0, 0, TestSprite2),
-                new Employee("TEST3", 0, 0, 0, 0, 0, 0, 0, TestSprite1),
-                new Employee("TEST4", 0, 0, 0, 0, 0, 0, 0, TestSprite2)
-            };
-            list.ForEach(x => GameManager.GetInstance.CurrentTeam.AddMember(x));
-            Debug.LogWarning("Scene is running standalone in the editor, GameManager is overwritten with dummy employees for debug.");
-        }
+    private void OnSelectionChanged(object sender, EventArgs e) {
+        ConfirmButton.interactable = featureEntryControllers.Values.All(x => x.SelectedEmployees.Any());
     }
 }

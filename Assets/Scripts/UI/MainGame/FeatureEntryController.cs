@@ -10,18 +10,13 @@ public class FeatureEntryController : MonoBehaviour {
     public FeatureEntryDragAreaController DragAreaController;
     public Feature Feature { get; private set; }
     public IEnumerable<Employee> SelectedEmployees => DragAreaController.SelectedEmployees;
-    public bool EmployeesSelected { get; private set; } = false;
-
-    void Start() {
-        DragAreaController.OnEmployeeSelectionChanged += OnSelectionChanged;
+    public event EventHandler OnSelectionChanged {
+        add => DragAreaController.OnEmployeeSelectionChanged += value;
+        remove => DragAreaController.OnEmployeeSelectionChanged -= value;
     }
 
     public void SetFeature(Feature feature, int featureIndex) {
         FeatureNameText.text = $"Feature {featureIndex}:\n{feature.Name}";
         Feature = feature;
-    }
-    
-    private void OnSelectionChanged(object sender, EventArgs e) {
-        EmployeesSelected = SelectedEmployees.Any();
     }
 }
