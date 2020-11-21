@@ -9,25 +9,21 @@ public static class TaskFactory {
             new DeployableTask("Client Searching API", 20, new List<Feature>() {
                 new Feature("Search by location / destination", 300, 0.4f),
                 new Feature("Search by check in date", 700, 0.24f),
-                new Feature("Search by check out date", 700, 0.31f),
-                new Feature("Search by number of guests", 800, 0.59f)
+                new Feature("Search by check out date", 700, 0.31f)
             }),
             new DeployableTask("Client Accommodation API", 30, new List<Feature>() {
                 new Feature("Add check in date", 800, 0.19f),
                 new Feature("Add check out date", 800, 0.20f),
-                new Feature("Add number of guests", 900, 0.24f),
-                new Feature("Show price summary", 1200, 0.31f)
+                new Feature("Add number of guests", 900, 0.24f)
             }),
             new DeployableTask("Client Reservation API", 35, new List<Feature>() {
                 new Feature("Add status for reservation request ", 300, 0.1f),
-                new Feature("Make changes to reservation request", 1300, 0.32f),
-                new Feature("Cancel reservation request", 1300, 0.40f)
+                new Feature("Make changes to reservation request", 1300, 0.32f)
             }),
             new DeployableTask("User Preference API", 20, new List<Feature>() {
                 new Feature("Save or remove rental homes", 1600, 0.43f),
                 new Feature("Create new list or add to existing list", 1700, 0.5f),
-                new Feature("Generate invitation link for editing and viewing", 1900, 0.59f),
-                new Feature("Add email address for editing and viewing", 2400, 0.61f)
+                new Feature("Generate invitation link for editing and viewing", 1900, 0.59f)
             }),
             new DeployableTask("Trip Planning API", 40, new List<Feature>() {
                 new Feature("Invite friends to plan trip by email", 2500, 0.62f),
@@ -36,8 +32,7 @@ public static class TaskFactory {
             new DeployableTask("Payment API", 180, new List<Feature>() {
                 new Feature("Save new payment method", 2800, 0.71f),
                 new Feature("Edit payment method", 3500, 0.75f),
-                new Feature("Remove payment method", 4100, 0.76f),
-                new Feature("Set a payment method as default", 4100, 0.78f)
+                new Feature("Remove payment method", 4100, 0.76f)
             }),
             new DeployableTask("Host Accommodation API (1)", 80, new List<Feature>() {
                 new Feature("Search by location / destination", 3300, 0.83f),
@@ -55,14 +50,12 @@ public static class TaskFactory {
             new DeployableTask("In-app messaging (1)", 120, new List<Feature>() {
                 new Feature("Add bot for customer support", 5000, 0.97f),
                 new Feature("Link to booking details", 300, 0.29f),
-                new Feature("Send kindness card or financial contribution to host", 700, 0.23f),
-                new Feature("Send image", 400, 0.14f)
+                new Feature("Send kindness card or financial contribution to host", 700, 0.23f)
             }),
             new DeployableTask("In-app messaging (2)", 100, new List<Feature>() {
                 new Feature("Change font size", 600, 0.21f),
                 new Feature("Notification", 1000, 0.3f),
-                new Feature("Report message", 2100, 0.43f),
-                new Feature("Block user", 2200, 0.43f)
+                new Feature("Report message", 2100, 0.43f)
             })
         };
 }

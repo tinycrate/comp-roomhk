@@ -11,6 +11,7 @@ public class DeployableTaskEntryController : MonoBehaviour, ITaskEntryController
     public Text TaskNameText;
     public Text EffortText;
     public Text DifficultyText;
+    public Text ValueText;
 
     public void Start() {
         GetComponent<Button>().onClick.AddListener(() => {
@@ -30,6 +31,7 @@ public class DeployableTaskEntryController : MonoBehaviour, ITaskEntryController
                 EffortText.text = $"Total Effort: {Mathf.RoundToInt(deployableTask.TotalFeatureEffort)}";
                 var averageDifficulty = deployableTask.Features.Sum(x => x.Difficulty) / deployableTask.Features.Count;
                 DifficultyText.text = $"Avg. Difficulty: {averageDifficulty:0.##}";
+                ValueText.text = $"Value: {deployableTask.Value}";
             } else {
                 Debug.LogWarning(
                     "DeployableTaskEntryController is getting a task that is not a DeployableTask (Which it should)"
