@@ -16,17 +16,18 @@ public class MainGameSceneManager : MonoBehaviourSingleton<MainGameSceneManager>
 
     [Header("Display")] 
     public Text DayText;
+    public GameObject GameViewSpawnArea;
 
     public IMainGameView CurrentView { get; private set; } = null;
 
     public void ShowTaskPlanning(ITask task) {
-        var newObject = Instantiate(PlanningGameView, MainCanvas.gameObject.transform);
+        var newObject = Instantiate(PlanningGameView, GameViewSpawnArea.transform);
         newObject.GetComponent<FeaturePlanningController>().SetDisplay(task, MainCanvas);
         ChangeView(newObject.GetComponent<IMainGameView>());
     }
 
     public void ShowTaskProgress(ITask taskBeingDisplayed) {
-        var newObject = Instantiate(DevelopGameView, MainCanvas.gameObject.transform);
+        var newObject = Instantiate(DevelopGameView, GameViewSpawnArea.transform);
         newObject.GetComponent<DevelopProgressController>().DisplayingTask = taskBeingDisplayed;
         ChangeView(newObject.GetComponent<IMainGameView>());
     }
