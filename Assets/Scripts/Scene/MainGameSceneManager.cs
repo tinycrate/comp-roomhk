@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,6 +18,11 @@ public class MainGameSceneManager : MonoBehaviourSingleton<MainGameSceneManager>
     [Header("Display")] 
     public Text DayText;
     public GameObject GameViewSpawnArea;
+
+    [Header("Functionality")] 
+    public Image AutoButton;
+
+    public bool AutoAdvancing { get; private set; } = false;
 
     public IMainGameView CurrentView { get; private set; } = null;
     private readonly HashSet<IMainGameToggleableView> toggleableViews = new HashSet<IMainGameToggleableView>(); 
@@ -40,6 +46,33 @@ public class MainGameSceneManager : MonoBehaviourSingleton<MainGameSceneManager>
 
     public void OnDeployableTaskDeployed(DeployableTask task) {
         TaskListController.UpgradeTaskToDeployed(task);
+    }
+
+    public void ToggleAutoAdvancement() {
+        if (AutoAdvancing) {
+            StopCoroutine(OnAutoAdvance());
+            AutoAdvancing = false;
+            UpdateAutoButtonDisplay();
+        } else {
+            StartCoroutine(OnAutoAdvance());
+        }
+    }
+
+    IEnumerator OnAutoAdvance() {
+        AutoAdvancing = true;
+        UpdateAutoButtonDisplay();
+        while (true) {
+            var employeeAllIdle = GameManager.GetInstance.CurrentTeam.CurrentMembers.All(
+                x => !x.AssignedFeatures.Any(y => y.RequireCoding || y.RequireTesting)
+            );
+            if (employeeAllIdle) {
+                AutoAdvancing = false;
+                UpdateAutoButtonDisplay();
+                yield break;
+            }
+            TriggerDayTick();
+            yield return new WaitForSeconds(0.5f);
+        }
     }
 
     public void ChangeView(IMainGameView view) {
@@ -82,6 +115,10 @@ public class MainGameSceneManager : MonoBehaviourSingleton<MainGameSceneManager>
 
     void OnDestroy() {
         GameManager.GetInstance.AfterDayTick -= AfterDayTick;
+    }
+
+    private void UpdateAutoButtonDisplay() {
+        AutoButton.color = AutoAdvancing ? new Color(0.2594f, 0.7518f, 1) : Color.white;
     }
 
     /* Code for debug */
