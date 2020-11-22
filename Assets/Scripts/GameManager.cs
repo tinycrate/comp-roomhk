@@ -11,16 +11,9 @@ public class GameManager : MonoBehaviourSingleton<GameManager> {
         TrunkBased
     }
 
-    public enum DeploymentMode {
-        Canary,
-        BlueGreen,
-        Rolling
-    }
-
     public GameStatManager StatManager { get; private set; }
 
     public SourceControlMode SelectedSourceControl { get; set; } = SourceControlMode.GitFlow;
-    public DeploymentMode SelectedDeploymentMode { get; set; } = DeploymentMode.Canary;
 
     public Team CurrentTeam { get; set; }
     public List<ITask> Tasks { get; private set; } = TaskFactory.DefaultList;

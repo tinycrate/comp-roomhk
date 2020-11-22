@@ -38,7 +38,7 @@ public class GameStatManager : IGameStat {
     public float TestFailurePercentage => (float) TestFailureCount / TotalTestCount;
     public int UnfixedProductionDefects => GameManager.GetInstance.DeployedServices.Sum(x=>x.ProductionDefectCount);
     public float DefectFrequency => (float) TotalProductionDefects / DayPassed;
-    public TeamKnowledge TeamKnowledgeSnapshot { get; set; }
+    public TeamKnowledge TeamKnowledgeSnapshot { get; private set; }
 
     public IEnumerable<ITask> CompletedTasks => GameManager.GetInstance.Tasks.Where(x => x.Completed);
 
@@ -47,6 +47,7 @@ public class GameStatManager : IGameStat {
 
     public void EndDay() {
         DayPassed += 1;
+        TeamKnowledgeSnapshot = new TeamKnowledge(GameManager.GetInstance.CurrentTeam.KnowledgeSnapshot);
         Snapshots.Add(new GameStatSnapshot(this));
     }
 }

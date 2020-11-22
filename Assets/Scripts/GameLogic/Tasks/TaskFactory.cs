@@ -34,11 +34,11 @@ public static class TaskFactory {
                 new Feature("Edit payment method", 3500, 0.75f),
                 new Feature("Remove payment method", 4100, 0.76f)
             }),
-            new DeployableTask("Host Accommodation API (1)", 80, new List<Feature>() {
+            new DeployableTask("Host Accommodation API (1)", 160, new List<Feature>() {
                 new Feature("Search by location / destination", 3300, 0.83f),
                 new Feature("Search by check in date", 3300, 0.84f)
             }),
-            new DeployableTask("Host Accommodation API (2)", 160, new List<Feature>() {
+            new DeployableTask("Host Accommodation API (2)", 250, new List<Feature>() {
                 new Feature("Add co-host via invitation link", 2700, 0.86f),
                 new Feature("Add co-host via email address", 3700, 0.91f),
                 new Feature("Set co-host permissions", 4700, 0.92f)
