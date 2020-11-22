@@ -30,8 +30,13 @@ public class GameManager : MonoBehaviourSingleton<GameManager> {
 
     public event EventHandler AfterDayTick;
 
+    public bool DisplayEndProductQuality { get; set; } = false;
+
+    public bool IsDebugging { get; private set; } = false;
+
     protected override void AfterAwake() {
         DontDestroyOnLoad(gameObject);
+        IsDebugging = Application.isEditor && SceneManager.GetActiveScene().buildIndex != 0;
     }
 
     public void PreviousScene() {
@@ -65,6 +70,9 @@ public class GameManager : MonoBehaviourSingleton<GameManager> {
 
     private void OnTaskDeployed(object sender, EventArgs e) {
         DeployedServices.Add((IDeployable)sender);
+        var sceneManager = MainGameSceneManager.GetInstance;
+        if (sceneManager == null) return;
+        sceneManager.OnDeployableTaskDeployed((DeployableTask) sender);
     }
 }
 

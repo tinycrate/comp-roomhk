@@ -31,7 +31,7 @@ public class DeployableTaskEntryController : MonoBehaviour, ITaskEntryController
                 EffortText.text = $"Total Effort: {Mathf.RoundToInt(deployableTask.TotalFeatureEffort)}";
                 var averageDifficulty = deployableTask.Features.Sum(x => x.Difficulty) / deployableTask.Features.Count;
                 DifficultyText.text = $"Avg. Difficulty: {averageDifficulty:0.##}";
-                ValueText.text = $"Value: {deployableTask.Value}";
+                ValueText.text = $"Satisfaction: {deployableTask.Value}/day";
             } else {
                 Debug.LogWarning(
                     "DeployableTaskEntryController is getting a task that is not a DeployableTask (Which it should)"

@@ -2122,7 +2122,7 @@ MonoBehaviour:
   - Name: Jason Chan
     Cost: 3500
     Efficiency: 0.56
-    Experience: 0.27
+    Experience: 0.434
     TestingSkills: 0.33
     OperationSkills: 0.869
     ReleaseEngSkills: 0.47
@@ -2131,11 +2131,11 @@ MonoBehaviour:
       type: 3}
   - Name: Mary Wong
     Cost: 4500
-    Efficiency: 0.5
-    Experience: 0.32
-    TestingSkills: 0.876
+    Efficiency: 0.549
+    Experience: 0.498
+    TestingSkills: 0.89
     OperationSkills: 0.17
-    ReleaseEngSkills: 0.71
+    ReleaseEngSkills: 0.744
     AutomationSkills: 0.44
     Image: {fileID: 2173984716163310964, guid: 03608f44add6879449c2488fdc900753, type: 3}
   - Name: Mark Chan
@@ -2150,8 +2150,8 @@ MonoBehaviour:
       type: 3}
   - Name: Mr. Brown
     Cost: 3500
-    Efficiency: 0.58
-    Experience: 0.27
+    Efficiency: 0.724
+    Experience: 0.588
     TestingSkills: 0.67
     OperationSkills: 0.35
     ReleaseEngSkills: 0.67
@@ -2179,7 +2179,7 @@ MonoBehaviour:
   - Name: Nick Lam
     Cost: 3500
     Efficiency: 0.54
-    Experience: 0.193
+    Experience: 0.366
     TestingSkills: 0.912
     OperationSkills: 0.5
     ReleaseEngSkills: 0.38
@@ -2197,8 +2197,8 @@ MonoBehaviour:
       type: 3}
   - Name: Peter Lau
     Cost: 3000
-    Efficiency: 0.69
-    Experience: 0.192
+    Efficiency: 0.594
+    Experience: 0.476
     TestingSkills: 0.67
     OperationSkills: 0.4
     ReleaseEngSkills: 0.85
