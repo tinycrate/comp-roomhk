@@ -19,6 +19,7 @@ public class MainGameSceneManager : MonoBehaviourSingleton<MainGameSceneManager>
     public GameObject GameViewSpawnArea;
 
     public IMainGameView CurrentView { get; private set; } = null;
+    private readonly HashSet<IMainGameToggleableView> toggleableViews = new HashSet<IMainGameToggleableView>(); 
 
     public void ShowTaskPlanning(ITask task) {
         var newObject = Instantiate(PlanningGameView, GameViewSpawnArea.transform);
@@ -42,6 +43,11 @@ public class MainGameSceneManager : MonoBehaviourSingleton<MainGameSceneManager>
     }
 
     public void ChangeView(IMainGameView view) {
+        foreach (var toggleableView in toggleableViews) {
+            if (toggleableView.IsShowing) {
+                toggleableView.ToggleDisplay();
+            }
+        }
         if (CurrentView != null) {
             StartCoroutine(OnDestroyView(CurrentView));
         }
@@ -54,6 +60,10 @@ public class MainGameSceneManager : MonoBehaviourSingleton<MainGameSceneManager>
             while (!view.Animator.GetCurrentAnimatorStateInfo(0).IsName("End")) yield return null;
         }
         Destroy(view.CurrentGameObject);
+    }
+
+    public void RegisterToggleableView(IMainGameToggleableView view) {
+        toggleableViews.Add(view);
     }
 
     public void Start() {

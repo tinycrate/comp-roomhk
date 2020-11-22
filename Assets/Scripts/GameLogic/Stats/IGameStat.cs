@@ -13,8 +13,8 @@ public interface IGameStat {
     float DeploymentFrequency { get; }
     float ChangeFailPercentage { get; }
     float UserSatisfaction { get; }
-    int TotalBuildCount { get; }
-    int TotalTestCount { get; }
+    // int TotalBuildCount { get; }
+    // int TotalTestCount { get; }
     int BuildFailureCount { get; }
     int TestFailureCount { get; }
     float BuildFailurePercentage { get; }

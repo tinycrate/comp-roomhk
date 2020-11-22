@@ -7,7 +7,7 @@ using Random = UnityEngine.Random;
 public class Production : IDeployable {
     public bool Deployed { get; } = true;
     public int ProductionDefectCount => 0;
-    public event EventHandler<Outage> OnProductionDowntime;
+    public event EventHandler<AvailabilityReport> OnProductionDowntime;
     public float LastDowntimeRecoveredDay { get; set; } = 0;
 
     public float Quality => Constants.BaseProductionQuality - Mathf.Min(
@@ -20,13 +20,13 @@ public class Production : IDeployable {
         if (Random.value > Quality) {
             var downtime = (1f - Quality) * (1f - Constants.MaxDowntimeReductionBonus *
                                              GameManager.GetInstance.CurrentTeam.TeamOperationKnowledge);
-            var outage = new Outage(
-                GameManager.GetInstance.StatManager.DayPassed - LastDowntimeRecoveredDay,
-                downtime
+            var report = new AvailabilityReport(
+                downtime,
+                GameManager.GetInstance.StatManager.DayPassed - LastDowntimeRecoveredDay
             );
             LastDowntimeRecoveredDay = GameManager.GetInstance.StatManager.DayPassed + downtime;
-            GameManager.GetInstance.StatManager.Outages.Add(outage);
-            OnProductionDowntime?.Invoke(this, outage);
+            GameManager.GetInstance.StatManager.AvailabilityReports.Add(report);
+            OnProductionDowntime?.Invoke(this, report);
         } else {
             TotalSatisfaction += Constants.BaseProductionSatisfactionValue * Quality;
         }
