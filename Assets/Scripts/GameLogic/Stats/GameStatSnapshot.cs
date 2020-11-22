@@ -13,8 +13,8 @@ public class GameStatSnapshot : IGameStat {
     public float DeploymentFrequency { get; set; }
     public float ChangeFailPercentage { get; set; }
     public float UserSatisfaction { get; set; }
-    public int TotalBuildCount { get; set; }
-    public int TotalTestCount { get; set; }
+    // public int TotalBuildCount { get; set; }
+    // public int TotalTestCount { get; set; }
     public int BuildFailureCount { get; set; }
     public int TestFailureCount { get; set; }
     public float BuildFailurePercentage { get; set; }
@@ -33,8 +33,8 @@ public class GameStatSnapshot : IGameStat {
         DeploymentFrequency = gameStat.DeploymentFrequency;
         ChangeFailPercentage = gameStat.ChangeFailPercentage;
         UserSatisfaction = gameStat.UserSatisfaction;
-        TotalBuildCount = gameStat.TotalBuildCount;
-        TotalTestCount = gameStat.TotalTestCount;
+        // TotalBuildCount = gameStat.TotalBuildCount;
+        // TotalTestCount = gameStat.TotalTestCount;
         BuildFailureCount = gameStat.BuildFailureCount;
         TestFailureCount = gameStat.TestFailureCount;
         BuildFailurePercentage = gameStat.BuildFailurePercentage;

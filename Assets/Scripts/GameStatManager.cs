@@ -9,7 +9,7 @@ public class GameStatManager : IGameStat {
     public float DayPassed { get; private set; } = 0;
     public List<GameStatSnapshot> Snapshots { get; } = new List<GameStatSnapshot>();
 
-    public List<Outage> Outages { get; } = new List<Outage>(); // Contains all (M)TTR, (M)TTF values and availability
+    public List<AvailabilityReport> AvailabilityReports { get; } = new List<AvailabilityReport>(); // Contains all (M)TTR, (M)TTF values and availability
     public List<float> LeadTimes { get;  } = new List<float>();
 
     public int TotalChangesToProduction { get; set; } = 0;
@@ -28,9 +28,9 @@ public class GameStatManager : IGameStat {
 
     public float UserSatisfaction => GameManager.GetInstance.DeployedServices.Sum(x => x.TotalSatisfaction);
 
-    public float MTTR => Outage.CalculateMTTR(Outages);
-    public float MTTF => Outage.CalculateMTTF(Outages);
-    public float ProductionAvailability => Outage.CalculateAvailability(Outages);
+    public float MTTR => AvailabilityReport.CalculateMTTR(AvailabilityReports);
+    public float MTTF => AvailabilityReport.CalculateMTTF(AvailabilityReports);
+    public float ProductionAvailability => AvailabilityReport.CalculateAvailability(AvailabilityReports);
     public float AverageLeadTime => LeadTimes.Sum() / LeadTimes.Count;
     public float DeploymentFrequency => ((float) TotalChangesToProduction - FailedChangesToProduction) / DayPassed;
     public float ChangeFailPercentage => (float) FailedChangesToProduction / TotalChangesToProduction;

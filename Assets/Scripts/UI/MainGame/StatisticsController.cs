@@ -7,11 +7,19 @@ using UnityEngine;
 using UnityEngine.UI;
 using XCharts;
 
-public class StatisticsController : MonoBehaviour {
+public class StatisticsController : MonoBehaviour, IMainGameToggleableView {
 
     public Dropdown OptionDropdown;
     public LineChart Chart;
     public Button MetricsShowButton;
+
+    private Animator animator;
+    public Animator Animator {
+        get {
+            if (animator == null) return animator = GetComponent<Animator>();
+            return animator;
+        }
+    }
 
     private readonly Dictionary<string, List<float>> metrics = new Dictionary<string, List<float>>();
 
@@ -21,6 +29,7 @@ public class StatisticsController : MonoBehaviour {
 
     // Start is called before the first frame update
     void Start() {
+        MainGameSceneManager.GetInstance.RegisterToggleableView(this);
         OptionDropdown.ClearOptions();
         UpdateMetrics();
         GameManager.GetInstance.AfterDayTick += AfterDayTick;
@@ -31,10 +40,12 @@ public class StatisticsController : MonoBehaviour {
         GameManager.GetInstance.AfterDayTick -= AfterDayTick;
     }
 
+    public bool IsShowing => Animator.GetCurrentAnimatorStateInfo(0).IsName("Showing");
+
     public void ToggleDisplay() {
-        var animator = GetComponent<Animator>();
-        animator.SetTrigger("ToggleDisplay");
-        if (animator.GetCurrentAnimatorStateInfo(0).IsName("Showing")) {
+        transform.SetAsLastSibling();
+        Animator.SetTrigger("ToggleDisplay");
+        if (IsShowing) {
             Chart.AnimationFadeOut();
         } else {
             Chart.AnimationReset();
@@ -42,17 +53,51 @@ public class StatisticsController : MonoBehaviour {
         }
     }
 
+    // Very dirty
+    private readonly Dictionary<string, string> metricNameAlias = new Dictionary<string, string>() {
+        {"MTTR", "MTTR (Hours)"},
+        {"MTTF", "MTTF (Days)"},
+        {"Production Availability", "Production Availability (%)"},
+        {"Average Lead Time", "Average Lead Time (Days)"},
+        {"Deployment Frequency", "Deployment Frequency (Deployment/Week)"},
+    };
+
     private void UpdateChart() {
         var selectedMetric = OptionDropdown.options[OptionDropdown.value].text;
         if (!metrics.TryGetValue(selectedMetric, out var values)) {
             Debug.LogWarning($"Statistics: Unable to get metrics for {selectedMetric}");
             return;
         }
-        Chart.title.text = selectedMetric;
+        Chart.yAxis0.minMaxType = Axis.AxisMinMaxType.MinMax;
+        Chart.yAxis0.min = 0;
+        Chart.yAxis0.max = 0;
+        // Very dirty way of changing scaling
+        var modifier = 1;
+        if (selectedMetric.Contains("Percentage") || selectedMetric.Contains("Knowledge")) {
+            modifier = 100;
+            Chart.yAxis0.minMaxType = Axis.AxisMinMaxType.Custom;
+            Chart.yAxis0.max = 100f;
+        }
+        if (selectedMetric == "MTTR") {
+            modifier = 24;
+        }
+        if (selectedMetric == "Deployment Frequency") {
+            modifier = 7;
+        }
+        if (selectedMetric == "Production Availability") {
+            Chart.yAxis0.minMaxType = Axis.AxisMinMaxType.Custom;
+            Chart.yAxis0.min = 0.96f;
+            Chart.yAxis0.max = 1f;
+        }
+        if (metricNameAlias.TryGetValue(selectedMetric, out var alias)) {
+            Chart.title.text = alias;
+        } else {
+            Chart.title.text = selectedMetric;
+        }
         Chart.ClearData();
         for (var i = 0; i < values.Count; i++) {
             var x = values[i];
-            Chart.AddData(0, i, x);
+            Chart.AddData(0, i, x * modifier);
         }
     }
 
@@ -94,6 +139,7 @@ public class StatisticsController : MonoBehaviour {
     }
 
     private readonly Dictionary<string, string> convertCamelCaseNameCache = new Dictionary<string, string>();
+
     private string ConvertCamelCaseName(string name) {
         if (convertCamelCaseNameCache.TryGetValue(name, out var convertedName)) return convertedName;
         convertedName = Utils.SplitCamelCase(name);

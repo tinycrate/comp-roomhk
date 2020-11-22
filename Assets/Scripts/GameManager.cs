@@ -54,8 +54,8 @@ public class GameManager : MonoBehaviourSingleton<GameManager> {
     public void TriggerDayTick() {
         CurrentTeam.TickBonus();
         CurrentTeam.CurrentMembers.ForEach(x => x.Work());
-        foreach (var task in Tasks.Where(x=>x is IDeployable)) {
-            ((IDeployable) task).TickDay();
+        foreach (var deployable in Tasks.OfType<IDeployable>().Union(DeployedServices).Distinct()) {
+            deployable.TickDay();
         }
         StatManager.EndDay();
         AfterDayTick?.Invoke(this, EventArgs.Empty);

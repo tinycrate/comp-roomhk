@@ -33,15 +33,15 @@ public class Constants {
     public const float TesterSkillPointBonus = 0.1f;
     // Difficulty of feature vs required skills points
     public static float MaxRequiredExperiencePoints =>
-        (GameManager.GetInstance.SelectedSourceControl == GameManager.SourceControlMode.GitFlow) ? 1.6f : 1.8f;
+        (GameManager.GetInstance.SelectedSourceControl == GameManager.SourceControlMode.GitFlow) ? 1.9f : 2.1f;
     public static float MaxRequiredTestingPoints => 
-        (GameManager.GetInstance.SelectedSourceControl == GameManager.SourceControlMode.GitFlow) ? 2f : 2.4f;
+        (GameManager.GetInstance.SelectedSourceControl == GameManager.SourceControlMode.GitFlow) ? 2.3f : 2.7f;
 
     // Employee working for more than a task
     public const float WorkMultiplePenalty = 0.1f;
 
     // Deployment
-    public const float LeastDeploySuccessProbability = 0.4f; // The minimum probability a deployment is successful
+    public const float LeastDeploySuccessProbability = 0.2f; // The minimum probability a deployment is successful
     public const float LeastDeployedServiceReliability = 0.6f; // The minimum probability a deployed service will introduce a defect in a day
     // Production
     public const float BaseProductionSatisfactionValue = 80;

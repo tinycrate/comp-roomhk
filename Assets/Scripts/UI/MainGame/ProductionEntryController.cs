@@ -9,25 +9,24 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class DeployableTaskEntryDeployedController : MonoBehaviour, ITaskEntryController {
+public class ProductionEntryController : MonoBehaviour {
 
     public Text TaskTypeText;
-    public Text TaskNameText;
+    public Text UptimeText;
     public Text SatisfactionText;
-    public Text DefectText;
     public Text QualityText;
-    public ITask TaskBeingDisplayed { get; set; } = null;
 
     private float displayingSatisfaction = 0;
+    private float totalSatisfaction = 0;
 
     void Start() {
         GetComponent<Button>().onClick.AddListener(() => {
-            // To be implemented
+            // To be implemented later
         });
         UpdateTaskAfterDayTick();
         GameManager.GetInstance.AfterDayTick += AfterDayTick;
         if (IsDebugging) {
-            Debug.LogWarning("Debug mode activated: Product quality will always be shown");
+            Debug.LogWarning("Debug mode activated: Production quality will always be shown");
         }
     }
 
@@ -39,31 +38,30 @@ public class DeployableTaskEntryDeployedController : MonoBehaviour, ITaskEntryCo
         GameManager.GetInstance.AfterDayTick -= AfterDayTick;
     }
 
-    public void Update() {
-        if (TaskBeingDisplayed == null) return;
-        TaskTypeText.text = "Deployed";
-        TaskNameText.text = TaskBeingDisplayed.Name;
-        if (!(TaskBeingDisplayed is DeployableTask deployableTask)) return;
-        DefectText.text = $"Defects: {deployableTask.ProductionDefectCount}";
+    void Update() {
         displayingSatisfaction = Utils.MoveTowardsProportion(
             displayingSatisfaction,
-            deployableTask.TotalSatisfaction,
+            totalSatisfaction,
             2f,
             Time.deltaTime / 0.15f
         );
-        SatisfactionText.text = $"Satisfaction: {displayingSatisfaction:0.0}";
+        SatisfactionText.text = $"Satisfaction: {displayingSatisfaction:0}";
     }
 
     private void UpdateTaskAfterDayTick() {
-        if (!(TaskBeingDisplayed is DeployableTask task)) return;
+        var production = GameManager.GetInstance.ProductionService;
+        if (production == null) return;
+        totalSatisfaction = GameManager.GetInstance.StatManager.UserSatisfaction;
         if (GameManager.GetInstance.DisplayEndProductQuality || IsDebugging) {
-            QualityText.text = $"Quality: {Mathf.RoundToInt(task.EndProductQuality * 100)}/100";
+            QualityText.text =
+                $"Quality: {Mathf.RoundToInt(production.Quality * 100)}/100";
         } else {
             QualityText.text = $"Quality: ???/100";
         }
         if (IsDebugging) {
             QualityText.text += "\n(Debug mode)";
         }
+        UptimeText.text = $"Uptime: {GameManager.GetInstance.StatManager.ProductionAvailability * 100:0.####}%";
     }
 
     private bool IsDebugging => GameManager.GetInstance.IsDebugging;
