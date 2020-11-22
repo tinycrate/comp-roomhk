@@ -5,7 +5,7 @@ using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-class DeployableTask : ITask, IDeployable {
+public class DeployableTask : ITask, IDeployable {
     public string Name { get; } // Name of the Task
     public float Value { get; } // How important the task to the users, affect the users' satisfaction
     public bool Compulsory => true;
@@ -42,7 +42,7 @@ class DeployableTask : ITask, IDeployable {
 
     public float EndProductQuality {
         get {
-            if (!Deployed || Features.Count <= 0) return 0;
+            if (Features.Count <= 0) return 0;
             if (Features.Any(x => x.CurrentState != Feature.State.Merged)) return 0;
             return Features.Sum(x => x.EndProductQuality) / Features.Count;
         }
@@ -67,9 +67,9 @@ class DeployableTask : ITask, IDeployable {
             if (Random.value > Constants.LeastDeploySuccessProbability
                 + (1f - Constants.LeastDeploySuccessProbability) * EndProductQuality) {
                 // Deployment failure
-                OnDeploymentFailure?.Invoke(this, EventArgs.Empty);
                 GameManager.GetInstance.StatManager.FailedChangesToProduction += 1;
                 RemainingReleaseEffort = ReleaseEffort;
+                OnDeploymentFailure?.Invoke(this, EventArgs.Empty);
             } else {
                 RemainingReleaseEffort = 0;
                 Deployed = true;
@@ -86,10 +86,10 @@ class DeployableTask : ITask, IDeployable {
             GameManager.GetInstance.StatManager.TotalProductionDefects += 1;
             OnProductionDefect?.Invoke(this, EventArgs.Empty);
         } else {
-            TotalSatisfaction += EndProductQuality * Value * Mathf.Min(
+            TotalSatisfaction += EndProductQuality * Value * (1f- Mathf.Min(
                                      Constants.MaxDeployableSatisfactionPunishment,
                                      Constants.DeployableSatisfactionPunishmentPerDefect * ProductionDefectCount
-                                 );
+                                 ));
         }
     }
 

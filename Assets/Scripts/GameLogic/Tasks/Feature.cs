@@ -16,7 +16,7 @@ public class Feature {
     public string Name { get; private set; }
     public float Effort { get;}
     public float RemainingEffort { get; private set; }
-    public float UnitTestEffort => Effort * Constants.UnitTestEffortPercentage * (1f + Difficulty);
+    public float UnitTestEffort => Effort * Constants.UnitTestEffortPercentage * (1f + Difficulty * Constants.MaxTestEffortDifficultlyScaling);
     public float RemainingUnitTestEffort { get; private set; }
     public bool BuildFailed { get; private set; } = false;
     public bool TestFailed { get; private set; } = false;

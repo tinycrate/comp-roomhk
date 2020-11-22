@@ -13,6 +13,7 @@ public class TaskListController : MonoBehaviour {
     [Header("Task Entry Prefabs")] 
     public GameObject DeployableTaskObject;
     public GameObject DeployableTaskInProgressObject;
+    public GameObject DeployableTaskDeployedObject;
 
     private readonly List<KeyValuePair<ITask, GameObject>> tasks = new List<KeyValuePair<ITask, GameObject>>();
     public IEnumerable<ITask> Tasks => tasks.Select(x => x.Key);
@@ -21,6 +22,12 @@ public class TaskListController : MonoBehaviour {
 
     public void UpgradeTaskInProgress(ITask task) {
         var newObject = Instantiate(DeployableTaskInProgressObject, ContainerGameObject.transform);
+        newObject.GetComponent<ITaskEntryController>().TaskBeingDisplayed = task;
+        SwapGameObject(task, newObject);
+    }
+
+    public void UpgradeTaskToDeployed(ITask task) {
+        var newObject = Instantiate(DeployableTaskDeployedObject, ContainerGameObject.transform);
         newObject.GetComponent<ITaskEntryController>().TaskBeingDisplayed = task;
         SwapGameObject(task, newObject);
     }

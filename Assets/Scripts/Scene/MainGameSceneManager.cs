@@ -36,6 +36,10 @@ public class MainGameSceneManager : MonoBehaviourSingleton<MainGameSceneManager>
         ShowTaskProgress(task);
     }
 
+    public void OnDeployableTaskDeployed(DeployableTask task) {
+        TaskListController.UpgradeTaskToDeployed(task);
+    }
+
     public void ChangeView(IMainGameView view) {
         if (CurrentView != null) {
             StartCoroutine(OnDestroyView(CurrentView));
@@ -76,7 +80,7 @@ public class MainGameSceneManager : MonoBehaviourSingleton<MainGameSceneManager>
     public Sprite TestSprite2;
 
     private void DebugFromEditorPlay() {
-        if (Application.isEditor && GameManager.GetInstance.CurrentTeam == null) {
+        if (GameManager.GetInstance.IsDebugging && GameManager.GetInstance.CurrentTeam == null) {
             GameManager.GetInstance.CurrentTeam = new Team();
             var list = new List<Employee> {
                 new Employee("TEST1", 1000, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, TestSprite1),

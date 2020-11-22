@@ -9,20 +9,21 @@ public class Constants {
         (GameManager.GetInstance.SelectedSourceControl == GameManager.SourceControlMode.GitFlow) ? 450f : 500f;
     // Test effort scaling
     public static float GlobalTestEffortFactor =>
-        (GameManager.GetInstance.SelectedSourceControl == GameManager.SourceControlMode.GitFlow) ? 60f : 100f;
+        (GameManager.GetInstance.SelectedSourceControl == GameManager.SourceControlMode.GitFlow) ? 120f : 200f;
+    public static float MaxTestEffortDifficultlyScaling = 0.5f;
     // How much of the total effort is the testing effort
     public const float GlobalReleaseFactor = 500f;
     public const float UnitTestEffortPercentage = 0.2f;
     // How much of the total feature effort is the release effort
-    public const float ReleaseEffortPercentage = 0.1f;
+    public const float ReleaseEffortPercentage = 0.2f;
     // Team knowledge progression constants
     public const float KnowledgeBonusFactor = 0.05f;
     public const float KnowledgeAwardFactor = 0.002f;
     // Build and test probabilities
     public static float LeastBuildSuccessProbability =>
-        (GameManager.GetInstance.SelectedSourceControl == GameManager.SourceControlMode.GitFlow) ? 0.4f : 0.3f;
+        (GameManager.GetInstance.SelectedSourceControl == GameManager.SourceControlMode.GitFlow) ? 0.3f : 0.2f;
     public static float LeastTestPassProbability =>
-        (GameManager.GetInstance.SelectedSourceControl == GameManager.SourceControlMode.GitFlow) ? 0.5f : 0.4f;
+        (GameManager.GetInstance.SelectedSourceControl == GameManager.SourceControlMode.GitFlow) ? 0.4f : 0.3f;
     public const float MaxTestProbabilityBonusFromTeam = 0.2f;
     // Build and test penalty
     public const float BuildFailEffortPenalty = 0.2f;
@@ -32,9 +33,9 @@ public class Constants {
     public const float TesterSkillPointBonus = 0.1f;
     // Difficulty of feature vs required skills points
     public static float MaxRequiredExperiencePoints =>
-        (GameManager.GetInstance.SelectedSourceControl == GameManager.SourceControlMode.GitFlow) ? 2f : 2.2f;
+        (GameManager.GetInstance.SelectedSourceControl == GameManager.SourceControlMode.GitFlow) ? 1.6f : 1.8f;
     public static float MaxRequiredTestingPoints => 
-        (GameManager.GetInstance.SelectedSourceControl == GameManager.SourceControlMode.GitFlow) ? 2.5f : 2.8f;
+        (GameManager.GetInstance.SelectedSourceControl == GameManager.SourceControlMode.GitFlow) ? 2f : 2.4f;
 
     // Employee working for more than a task
     public const float WorkMultiplePenalty = 0.1f;
