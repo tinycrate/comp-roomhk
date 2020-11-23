@@ -9,7 +9,8 @@ using RectTransform = UnityEngine.RectTransform;
 public class DraggableEmployeeController : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, 
     IPointerClickHandler {
     public Canvas ParentCanvas { get; set; }
-    public FeaturePlanningController ParentController { get; private set; }
+    public GameObject EmployeeListContainer { get; private set; }
+    public GameObject EmployeeDraggingContainer { get; private set; }
     public Employee Employee { get; private set; }
 
     public bool Registered { get; private set; } = false;
@@ -22,8 +23,9 @@ public class DraggableEmployeeController : MonoBehaviour, IBeginDragHandler, IDr
         }
     }
 
-    public void Register(FeaturePlanningController parentController, Employee employee, Canvas parentCanvas) {
-        ParentController = parentController;
+    public void Register(GameObject employeeListContainer, GameObject employeeDraggingContainer,Employee employee, Canvas parentCanvas) {
+        EmployeeListContainer = employeeListContainer;
+        EmployeeDraggingContainer = employeeDraggingContainer;
         Employee = employee;
         ImageComponent.sprite = employee.Image;
         ParentCanvas = parentCanvas;
@@ -38,7 +40,7 @@ public class DraggableEmployeeController : MonoBehaviour, IBeginDragHandler, IDr
 
     public void OnBeginDrag(PointerEventData eventData) {
         if (!Registered) return;
-        transform.SetParent(ParentController.EmployeeDraggingContainer.transform, false);
+        transform.SetParent(EmployeeDraggingContainer.transform, false);
         GetComponent<Image>().raycastTarget = false;
         GetComponent<RectTransform>().pivot = new Vector2(0, 1);
     }
@@ -85,7 +87,7 @@ public class DraggableEmployeeController : MonoBehaviour, IBeginDragHandler, IDr
     private void RestorePosition() {
         GetComponent<Image>().raycastTarget = true;
         var parentObject = (AssignedDragArea == null)
-            ? ParentController.EmployeeListContainer.transform
+            ? EmployeeListContainer.transform
             : AssignedDragArea.HoldingArea.transform;
         transform.SetParent(parentObject, false);
         GetComponent<RectTransform>().pivot = new Vector2(0.5f, 0.5f);

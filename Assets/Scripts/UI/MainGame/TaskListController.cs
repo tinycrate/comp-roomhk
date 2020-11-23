@@ -14,11 +14,18 @@ public class TaskListController : MonoBehaviour {
     public GameObject DeployableTaskObject;
     public GameObject DeployableTaskInProgressObject;
     public GameObject DeployableTaskDeployedObject;
+    public GameObject SimpleTaskObject;
 
     private readonly List<KeyValuePair<ITask, GameObject>> tasks = new List<KeyValuePair<ITask, GameObject>>();
     public IEnumerable<ITask> Tasks => tasks.Select(x => x.Key);
 
     private GameObject unassignedObjectPool;
+
+    public void SpawnSimpleTaskObject(SimpleTask simpleTask) {
+        var newObject = Instantiate(SimpleTaskObject, ContainerGameObject.transform);
+        newObject.GetComponent<SimpleTaskController>().Task = simpleTask;
+        SwapGameObject(simpleTask, newObject);
+    }
 
     public void UpgradeTaskInProgress(ITask task) {
         var newObject = Instantiate(DeployableTaskInProgressObject, ContainerGameObject.transform);
@@ -91,5 +98,4 @@ public class TaskListController : MonoBehaviour {
             task.Value.transform.SetAsLastSibling();
         }
     }
-
 }

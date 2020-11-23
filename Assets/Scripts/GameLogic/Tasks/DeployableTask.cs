@@ -19,7 +19,6 @@ public class DeployableTask : ITask, IDeployable {
     public bool Started => Features.Any(x => x.CurrentState != Feature.State.Idle);
     public bool Assigned { get; set; } = false;
     public float LeadTime { get; private set; }
-    public event EventHandler OnTaskCompleted;
     public event EventHandler<float> OnSatisfactionChange;
     public bool Deployed { get; private set; } = false;
 
@@ -75,7 +74,6 @@ public class DeployableTask : ITask, IDeployable {
                 Deployed = true;
                 GameManager.GetInstance.StatManager.LeadTimes.Add(LeadTime);
                 OnDeployed?.Invoke(this, EventArgs.Empty);
-                OnTaskCompleted?.Invoke(this, EventArgs.Empty);
             }
             return;
         };

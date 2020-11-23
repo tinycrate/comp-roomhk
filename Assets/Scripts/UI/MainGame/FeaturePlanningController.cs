@@ -47,7 +47,7 @@ public class FeaturePlanningController : MonoBehaviour, IMainGameView {
                 }
             }
             SelectedTask.Assigned = true;
-            MainGameSceneManager.GetInstance.OnTaskAssignmentCompleted(this, SelectedTask);
+            MainGameSceneManager.GetInstance.OnTaskAssignmentCompleted(SelectedTask);
         });
     }
 
@@ -57,7 +57,12 @@ public class FeaturePlanningController : MonoBehaviour, IMainGameView {
         }
         foreach (var employee in AvailableEmployees) {
             var newObject = new GameObject(employee.Name, typeof(RectTransform), typeof(CanvasRenderer));
-            newObject.AddComponent<DraggableEmployeeController>().Register(this, employee, ParentCanvas);
+            newObject.AddComponent<DraggableEmployeeController>().Register(
+                EmployeeListContainer,
+                EmployeeDraggingContainer,
+                employee,
+                ParentCanvas
+            );
             newObject.transform.SetParent(EmployeeListContainer.transform, false);
             newObject.GetComponent<RectTransform>().localScale = new Vector3(0.85f, 0.85f);
         }

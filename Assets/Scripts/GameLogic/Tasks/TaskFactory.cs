@@ -6,15 +6,32 @@ using UnityEngine;
 public static class TaskFactory {
     public static List<ITask> DefaultList =>
         new List<ITask>() {
-            // new UpgradeTask("Integrate with Cloud APM (App Performance Monitoring) tools", "     - Can view quality\n    - Can improve quality",
-            //     new Requirement("Day", () => GameManager.GetInstance.StatManager.DayPassed > 10 && GameManager.GetInstance.DeployedServices.Count > 1),
-            //     new List<Requirement> {
-            //         new Requirement("Cloud and Automation Knowledge >= 25%", () => GameManager.GetInstance.CurrentTeam.TeamAutomationKnowledge >= 0.25f),
-            //         new Requirement("Monitor Knowledge >= 30%", () => GameManager.GetInstance.CurrentTeam.TeamOperationKnowledge >= 0.3f)
-            //     }, new List<Feature>() {
-            //         new Feature("")
-            //     }
-            // ),
+            SimpleTask.CreateTaskCustom(SimpleTask.TaskNature.Upgrade,"Integrate with Cloud APM (App Performance Monitoring) tools", "    - Can view quality\n    - Can improve quality",
+                "One of your employee suggested to use a Cloud APM to monitor our application performance so we can know how to improve better. This task requires cloud and automation skills to complete and could take multiple days. When an employee is busy working on this task. He/she might have less time working on other tasks.",
+                new Requirement("Day", () => GameManager.GetInstance.StatManager.DayPassed > 10 && GameManager.GetInstance.DeployedServices.Count > 1),
+                new List<Requirement> {
+                    new Requirement("Cloud and Automation Knowledge >= 25%", () => GameManager.GetInstance.CurrentTeam.TeamAutomationKnowledge >= 0.25f),
+                    new Requirement("Monitor Knowledge >= 30%", () => GameManager.GetInstance.CurrentTeam.TeamOperationKnowledge >= 0.3f)
+                }, () => GameManager.GetInstance.DisplayEndProductQuality = true,
+                task => {
+                    if (!task.FloatState.TryGetValue("effortRemaining", out var effortRemaining)) {
+                        effortRemaining = 2.5f;
+                        task.FloatState["effortRemaining"] = effortRemaining;
+                    }
+                    foreach (var employee in task.AssignedEmployees) {
+                        employee.PutBurden(0.5f);
+                        effortRemaining -= employee.AutomationSkills + employee.AssignedTeam.TeamAutomationKnowledge;
+                        Debug.Log(effortRemaining);
+                        if (effortRemaining <= 0) {
+                            task.FloatState["effortRemaining"] = 0;
+                            return true;
+                        }
+                    }
+                    task.FloatState["effortRemaining"] = effortRemaining;
+                    task.CustomProgress = (2.5f - effortRemaining) / 2.5f;
+                    return false;
+                }, true
+            ),
             new DeployableTask("Client Searching API", 20, new List<Feature>() {
                 new Feature("Search by location / destination", 300, 0.26f),
                 new Feature("Search by check in date", 700, 0.24f),

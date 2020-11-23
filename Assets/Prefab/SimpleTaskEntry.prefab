@@ -247,8 +247,9 @@ GameObject:
   - component: {fileID: 4753537132886011360}
   - component: {fileID: 4753537132886011365}
   - component: {fileID: 5853581564467632418}
+  - component: {fileID: 6632654499887194246}
   m_Layer: 5
-  m_Name: UpgradeTaskEntry
+  m_Name: SimpleTaskEntry
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -382,6 +383,22 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &6632654499887194246
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4753537132886011362}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 341be045708982048aa3f929af2409ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TaskTypeText: {fileID: 4753537131863909126}
+  TaskNameText: {fileID: 4753537133797148459}
+  EffectText: {fileID: 4753537132599186593}
+  EffectTitleText: {fileID: 4753537132708608507}
 --- !u!1 &4753537133797148469
 GameObject:
   m_ObjectHideFlags: 0

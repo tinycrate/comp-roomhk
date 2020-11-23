@@ -17,6 +17,8 @@ public class Employee {
     [Range(0, 1)] public float AutomationSkills;
     public Sprite Image;
 
+    public float IndividualEfficiency { get; private set; } = 1;
+
     private List<Feature> assignedFeatures = new List<Feature>();
 
     public List<Feature> AssignedFeatures => assignedFeatures ?? (assignedFeatures = new List<Feature>());
@@ -35,6 +37,12 @@ public class Employee {
         Image = image;
     }
 
+    // Put a percentage of burden (0-1) on the employee, he will work less effectively
+    // The burden is relived every day if not put again
+    public void PutBurden(float percentage) {
+        IndividualEfficiency *= (1f - percentage);
+    }
+
     // Work on the assigned feature, should be called once per day
     public void Work() {
         if (AssignedTeam == null) {
@@ -43,6 +51,7 @@ public class Employee {
         }
         var remainingCodingEffort = Constants.GlobalEffortFactor * Efficiency * (1f + AssignedTeam.DevOpsKnowledge);
         var remainingTestingEffort = Constants.GlobalTestEffortFactor * TestingSkills * (1f + AssignedTeam.TeamTestingKnowledge);
+        IndividualEfficiency = 1f;
         while (true) {
             var features = AssignedFeatures.Where(feature => feature.RequireCoding).ToList();
             if (features.Count <= 0) break;
