@@ -15,6 +15,7 @@ public class MainGameSceneManager : MonoBehaviourSingleton<MainGameSceneManager>
     public GameObject PlanningGameView;
     public GameObject DevelopGameView;
     public GameObject ProductionGameView;
+    public GameObject SimpleTaskGameView;
 
     [Header("Display")] 
     public Text DayText;
@@ -40,13 +41,23 @@ public class MainGameSceneManager : MonoBehaviourSingleton<MainGameSceneManager>
         ChangeView(newObject.GetComponent<IMainGameView>());
     }
 
+    public void ShowSimpleTaskPlanning(SimpleTask task) {
+        if (task.Accepted && task.CompletionMethod == SimpleTask.TaskCompletionMethod.EmployeeManaged) {
+            ShowTaskPlanning(task);
+            return;
+        }
+        var newObject = Instantiate(SimpleTaskGameView, GameViewSpawnArea.transform);
+        newObject.GetComponent<SimpleTaskPlanningController>().SetDisplay(task, MainCanvas);
+        ChangeView(newObject.GetComponent<IMainGameView>());
+    }
+
     public void ShowTaskProgress(ITask taskBeingDisplayed) {
         var newObject = Instantiate(DevelopGameView, GameViewSpawnArea.transform);
         newObject.GetComponent<DevelopProgressController>().DisplayingTask = taskBeingDisplayed;
         ChangeView(newObject.GetComponent<IMainGameView>());
     }
 
-    public void OnTaskAssignmentCompleted(FeaturePlanningController controller, ITask task) {
+    public void OnTaskAssignmentCompleted(ITask task) {
         TaskListController.UpgradeTaskInProgress(task);
         ShowTaskProgress(task);
     }
@@ -106,6 +117,9 @@ public class MainGameSceneManager : MonoBehaviourSingleton<MainGameSceneManager>
 
     public void RegisterToggleableView(IMainGameToggleableView view) {
         toggleableViews.Add(view);
+    }
+    public void ShowTaskOnTaskList(SimpleTask simpleTask) {
+        TaskListController.SpawnSimpleTaskObject(simpleTask);
     }
 
     public void Start() {

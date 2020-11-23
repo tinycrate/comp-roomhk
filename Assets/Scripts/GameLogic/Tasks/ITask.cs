@@ -10,5 +10,4 @@ public interface ITask {
     bool Compulsory { get; }
     bool Assigned { get; set; }
     bool Completed { get; }
-    event EventHandler OnTaskCompleted;
 }

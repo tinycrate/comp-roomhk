@@ -249,6 +249,8 @@ MonoBehaviour:
     type: 3}
   DeployableTaskDeployedObject: {fileID: 6878777114562979323, guid: a736cc9d26280a245942b05f09659f69,
     type: 3}
+  SimpleTaskObject: {fileID: 4753537132886011362, guid: 05419776f12137b4b946c3606d0eecea,
+    type: 3}
 --- !u!95 &5169985144414505040
 Animator:
   serializedVersion: 3

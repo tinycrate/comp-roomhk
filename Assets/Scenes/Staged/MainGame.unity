@@ -968,6 +968,8 @@ MonoBehaviour:
     type: 3}
   ProductionGameView: {fileID: 6205204590508275086, guid: b34bea5796758104289e2333932f242b,
     type: 3}
+  SimpleTaskGameView: {fileID: 744403790619557857, guid: a463eb6801c424048a94636952096672,
+    type: 3}
   DayText: {fileID: 642605051}
   GameViewSpawnArea: {fileID: 1822002531}
   AutoButton: {fileID: 273378308}
@@ -1794,7 +1796,7 @@ PrefabInstance:
     - target: {fileID: 7554920532245505349, guid: 9d566bc5dd74bff4bbdadd4ff8e8f14e,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -51.999977
+      value: -51.99999
       objectReference: {fileID: 0}
     - target: {fileID: 7554920532397702515, guid: 9d566bc5dd74bff4bbdadd4ff8e8f14e,
         type: 3}

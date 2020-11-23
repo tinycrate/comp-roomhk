@@ -70,5 +70,9 @@ public class GameManager : MonoBehaviourSingleton<GameManager> {
         if (sceneManager == null) return;
         sceneManager.OnDeployableTaskDeployed((DeployableTask) sender);
     }
+
+    public void ShowTaskOnTaskList(SimpleTask simpleTask) {
+        MainGameSceneManager.GetInstance.ShowTaskOnTaskList(simpleTask);
+    }
 }
 
