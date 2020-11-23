@@ -115,7 +115,7 @@ public class DeployableTask : ITask, IDeployable {
             SimpleTask.TaskNature.Fix,
             $"[Large] Deploy fix for {Name}",
             "Remove maximum of 5 defects",
-            $"Your team notices large amount of defects in the deployed feature {Name}. They suggested they can fix at most 5 of them, but this requires a scheduled downtime of 5 hours. This task can only be done once. You should look for another way to improve your product quality if defects keep happening.",
+            $"Your team notices large amount of defects in the deployed feature {Name}. They suggested they can fix at most 5 of them, but this requires a scheduled downtime of 3 hours. This task can only be done once. You should look for another way to improve your product quality if defects keep happening.",
             new Requirement("DefectCount", () => ProductionDefectCount >= 5),
             new List<Requirement>() {new Requirement("[Alert] Will cause 3 hours of downtime", () => true)},
             new List<Feature>{new Feature("Fix 5 defects", TotalFeatureEffort * 0.5f, 0.8f)},
