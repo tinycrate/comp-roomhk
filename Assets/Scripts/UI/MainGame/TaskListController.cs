@@ -28,6 +28,9 @@ public class TaskListController : MonoBehaviour {
     }
 
     public void UpgradeTaskInProgress(ITask task) {
+        if (task is SimpleTask simpleTask) {
+            simpleTask.TaskCompleted += (sender, args) => SpawnSimpleTaskObject(simpleTask);
+        }
         var newObject = Instantiate(DeployableTaskInProgressObject, ContainerGameObject.transform);
         newObject.GetComponent<ITaskEntryController>().TaskBeingDisplayed = task;
         SwapGameObject(task, newObject);
@@ -47,6 +50,17 @@ public class TaskListController : MonoBehaviour {
 
     public void AddTask(ITask task) {
         tasks.Add(new KeyValuePair<ITask, GameObject>(task, SpawnObject(task)));
+        UpdateTaskList();
+    }
+
+    public void AddTaskNextTo(ITask task, ITask nextTo) {
+        var index = tasks.FindIndex(x => x.Key == nextTo);
+        if (index < 0) {
+            Debug.LogWarning("Attempted to find a task from TaskList that does not exist. Task is being inserted to the bottom.");
+            AddTask(task);
+        } else {
+            AddTaskAt(task, index + 1);
+        }
         UpdateTaskList();
     }
 
