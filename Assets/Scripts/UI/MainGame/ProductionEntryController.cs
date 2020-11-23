@@ -18,7 +18,7 @@ public class ProductionEntryController : MonoBehaviour {
 
     void Start() {
         GetComponent<Button>().onClick.AddListener(() => {
-            // To be implemented later
+            MainGameSceneManager.GetInstance.ShowProductionView();
         });
         UpdateTaskAfterDayTick();
         GameManager.GetInstance.AfterDayTick += AfterDayTick;

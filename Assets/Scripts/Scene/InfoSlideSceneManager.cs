@@ -40,6 +40,16 @@ public class InfoSlideSceneManager : MonoBehaviour {
                 : GreenButtonColor;
     }
 
+    public void OnGitFlowToggleChanged(bool enable) {
+        if(!enable) return;
+        GameManager.GetInstance.SelectedSourceControl = GameManager.SourceControlMode.GitFlow;
+    }
+
+    public void OnTrunkBasedToggleChanged(bool enable) {
+        if(!enable) return;
+        GameManager.GetInstance.SelectedSourceControl = GameManager.SourceControlMode.TrunkBased;
+    }
+
     public void Previous() {
         if (transiting) return;
         transiting = true;

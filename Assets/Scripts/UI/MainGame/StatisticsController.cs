@@ -14,6 +14,7 @@ public class StatisticsController : MonoBehaviour, IMainGameToggleableView {
     public Button MetricsShowButton;
 
     private Animator animator;
+
     public Animator Animator {
         get {
             if (animator == null) return animator = GetComponent<Animator>();
@@ -32,6 +33,7 @@ public class StatisticsController : MonoBehaviour, IMainGameToggleableView {
         MainGameSceneManager.GetInstance.RegisterToggleableView(this);
         OptionDropdown.ClearOptions();
         UpdateMetrics();
+        UpdateChart();
         GameManager.GetInstance.AfterDayTick += AfterDayTick;
         OptionDropdown.onValueChanged.AddListener((selection) => { UpdateChart(); });
     }
@@ -107,7 +109,6 @@ public class StatisticsController : MonoBehaviour, IMainGameToggleableView {
             MetricsShowButton.interactable = false;
             return;
         }
-        MetricsShowButton.interactable = true;
         foreach (var property in properties) {
             var values = new List<float>();
             foreach (var snapshot in GameManager.GetInstance.StatManager.Snapshots) {
@@ -120,7 +121,9 @@ public class StatisticsController : MonoBehaviour, IMainGameToggleableView {
         metrics.Add("Release Engineering Knowledge", new List<float>());
         metrics.Add("Automation Knowledge", new List<float>());
         metrics.Add("DevOps Knowledge", new List<float>());
-        foreach (var knowledge in GameManager.GetInstance.StatManager.Snapshots.Select(snapshot => snapshot.TeamKnowledgeSnapshot)) {
+        foreach (var knowledge in GameManager.GetInstance.StatManager.Snapshots.Select(
+            snapshot => snapshot.TeamKnowledgeSnapshot
+        )) {
             metrics["Testing Knowledge"].Add(knowledge.TeamTestingKnowledge);
             metrics["Operation Knowledge"].Add(knowledge.TeamOperationKnowledge);
             metrics["Release Engineering Knowledge"].Add(knowledge.TeamReleaseEngKnowledge);
@@ -131,6 +134,7 @@ public class StatisticsController : MonoBehaviour, IMainGameToggleableView {
             OptionDropdown.ClearOptions();
             OptionDropdown.AddOptions(metrics.Keys.ToList());
         }
+        MetricsShowButton.interactable = GameManager.GetInstance.StatManager.Snapshots.Any();
     }
 
     private void AfterDayTick(object sender, EventArgs args) {

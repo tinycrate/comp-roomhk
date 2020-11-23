@@ -4266,7 +4266,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 186.1001, y: -52.000027}
+  m_AnchoredPosition: {x: 186.1001, y: -51.99998}
   m_SizeDelta: {x: 674.95746, y: 357.54578}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7554920532245505355
@@ -6361,8 +6361,8 @@ MonoBehaviour:
         m_DataChangeEnable: 1
         m_DataChangeDuration: 250
         m_ActualDuration: 0
-        m_CurrDetailProgress: -261.77872
-        m_DestDetailProgress: 154.02725
+        m_CurrDetailProgress: -226.77873
+        m_DestDetailProgress: 129.18724
       m_LineArrow:
         m_JsonData: 
         m_DataFromJson: 0

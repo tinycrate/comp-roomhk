@@ -6,6 +6,15 @@ using UnityEngine;
 public static class TaskFactory {
     public static List<ITask> DefaultList =>
         new List<ITask>() {
+            // new UpgradeTask("Integrate with Cloud APM (App Performance Monitoring) tools", "     - Can view quality\n    - Can improve quality",
+            //     new Requirement("Day", () => GameManager.GetInstance.StatManager.DayPassed > 10 && GameManager.GetInstance.DeployedServices.Count > 1),
+            //     new List<Requirement> {
+            //         new Requirement("Cloud and Automation Knowledge >= 25%", () => GameManager.GetInstance.CurrentTeam.TeamAutomationKnowledge >= 0.25f),
+            //         new Requirement("Monitor Knowledge >= 30%", () => GameManager.GetInstance.CurrentTeam.TeamOperationKnowledge >= 0.3f)
+            //     }, new List<Feature>() {
+            //         new Feature("")
+            //     }
+            // ),
             new DeployableTask("Client Searching API", 20, new List<Feature>() {
                 new Feature("Search by location / destination", 300, 0.26f),
                 new Feature("Search by check in date", 700, 0.24f),

@@ -14,6 +14,7 @@ public class TeamKnowledgeDisplayController : MonoBehaviour, IMainGameToggleable
     public Image TeamOperationProgress;
     public Image TeamEngineeringProgress;
     public Image TeamAutomationProgress;
+    public Image TeamDevOpsProgress;
     public GameObject EmployeeHoldingArea;
 
     public Text EmployeeNameText;
@@ -56,6 +57,12 @@ public class TeamKnowledgeDisplayController : MonoBehaviour, IMainGameToggleable
             0.02f,
             Time.deltaTime / 0.15f
         );
+        TeamDevOpsProgress.fillAmount = Utils.MoveTowardsProportion(
+            TeamDevOpsProgress.fillAmount,
+            GameManager.GetInstance.CurrentTeam.DevOpsKnowledge,
+            0.02f,
+            Time.deltaTime / 0.15f
+        );
     }
 
     public bool IsShowing => Animator.GetCurrentAnimatorStateInfo(0).IsName("Showing");
@@ -83,7 +90,7 @@ public class TeamKnowledgeDisplayController : MonoBehaviour, IMainGameToggleable
     }
 
     private void OnDisplayEmployeeStat(Employee employee) {
-        EmployeeNameText.text = $"{employee.Name} (Individual)";
+        EmployeeNameText.text = $"{employee.Name}";
         EmployeeStatText.text =
             $"Efficiency {Mathf.RoundToInt(employee.Efficiency * 100)}, Experience {Mathf.RoundToInt(employee.Experience * 100)}, Testing {Mathf.RoundToInt(employee.TestingSkills * 100)}, Operation {Mathf.RoundToInt(employee.OperationSkills * 100)}, Release {Mathf.RoundToInt(employee.ReleaseEngSkills * 100)},  Automation {Mathf.RoundToInt(employee.AutomationSkills * 100)}";
     }

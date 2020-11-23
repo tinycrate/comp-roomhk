@@ -57,15 +57,29 @@ public class DevelopProgressController : MonoBehaviour, IMainGameView {
             if (testText == null) continue;
             if (mergeText == null) continue;
             SetTextProgress(codeText, 1f - feature.RemainingEffort / feature.Effort);
-            buildText.text = (feature.BuildFailed) ? "✗" :
+            buildText.text = (feature.BuildFailed) ? "Fail" :
                 (feature.CurrentState == Feature.State.Testing || feature.CurrentState == Feature.State.Merged)
-                    ? "✓" : "-";
+                    ? "Pass" : "-";
             if (feature.TestFailed) {
-                testText.text = "✗";
+                testText.text = "Fail";
             } else {
                 SetTextProgress(testText, 1f - feature.RemainingUnitTestEffort / feature.UnitTestEffort);
             }
-            mergeText.text = (feature.CurrentState == Feature.State.Merged) ? "✓" : "-";
+            mergeText.text = (feature.CurrentState == Feature.State.Merged) ? "Pass" : "-";
+            var textsToChangeColor = new List<Text> {buildText, mergeText, testText};
+            foreach(var text in textsToChangeColor) {
+                switch (text.text) {
+                    case "Pass":
+                        text.color = new Color(0, 0.6f, 0);
+                        break;
+                    case "Fail":
+                        text.color = Color.red;
+                        break;
+                    default:
+                        text.color = new Color(0.1960784f,0.1960784f,0.1960784f);
+                        break;
+                }
+            }
         }
         var deployableTask = DisplayingTask as DeployableTask;
         if (deployableTask == null) return;
