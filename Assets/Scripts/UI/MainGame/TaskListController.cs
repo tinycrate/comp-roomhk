@@ -32,7 +32,7 @@ public class TaskListController : MonoBehaviour {
         SwapGameObject(task, newObject);
     }
 
-    public void Start() {
+    public void AddTaskFromGameManager() {
         foreach (var task in GameManager.GetInstance.Tasks) {
             AddTask(task);
         }

@@ -14,6 +14,7 @@ public class MainGameSceneManager : MonoBehaviourSingleton<MainGameSceneManager>
     [Header("Prefabs")] 
     public GameObject PlanningGameView;
     public GameObject DevelopGameView;
+    public GameObject ProductionGameView;
 
     [Header("Display")] 
     public Text DayText;
@@ -21,11 +22,17 @@ public class MainGameSceneManager : MonoBehaviourSingleton<MainGameSceneManager>
 
     [Header("Functionality")] 
     public Image AutoButton;
+    public TaskListController TaskList;
 
     public bool AutoAdvancing { get; private set; } = false;
 
     public IMainGameView CurrentView { get; private set; } = null;
-    private readonly HashSet<IMainGameToggleableView> toggleableViews = new HashSet<IMainGameToggleableView>(); 
+    private readonly HashSet<IMainGameToggleableView> toggleableViews = new HashSet<IMainGameToggleableView>();
+
+    public void ShowProductionView() {
+        var newObject = Instantiate(ProductionGameView, GameViewSpawnArea.transform);
+        ChangeView(newObject.GetComponent<IMainGameView>());
+    }
 
     public void ShowTaskPlanning(ITask task) {
         var newObject = Instantiate(PlanningGameView, GameViewSpawnArea.transform);
@@ -50,11 +57,11 @@ public class MainGameSceneManager : MonoBehaviourSingleton<MainGameSceneManager>
 
     public void ToggleAutoAdvancement() {
         if (AutoAdvancing) {
-            StopCoroutine(OnAutoAdvance());
+            StopCoroutine("OnAutoAdvance");
             AutoAdvancing = false;
             UpdateAutoButtonDisplay();
         } else {
-            StartCoroutine(OnAutoAdvance());
+            StartCoroutine("OnAutoAdvance");
         }
     }
 
@@ -65,7 +72,9 @@ public class MainGameSceneManager : MonoBehaviourSingleton<MainGameSceneManager>
             var employeeAllIdle = GameManager.GetInstance.CurrentTeam.CurrentMembers.All(
                 x => !x.AssignedFeatures.Any(y => y.RequireCoding || y.RequireTesting)
             );
-            if (employeeAllIdle) {
+            var tasksDeploying = GameManager.GetInstance.Tasks.OfType<DeployableTask>()
+                .Any(x => x.Started && !x.Deployed);
+            if (employeeAllIdle && !tasksDeploying) {
                 AutoAdvancing = false;
                 UpdateAutoButtonDisplay();
                 yield break;
@@ -102,6 +111,7 @@ public class MainGameSceneManager : MonoBehaviourSingleton<MainGameSceneManager>
     public void Start() {
         DebugFromEditorPlay();
         GameManager.GetInstance.StartSimulation();
+        TaskList.AddTaskFromGameManager();
         GameManager.GetInstance.AfterDayTick += AfterDayTick;
     }
 

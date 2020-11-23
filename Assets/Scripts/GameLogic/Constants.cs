@@ -11,6 +11,8 @@ public class Constants {
     public static float GlobalTestEffortFactor =>
         (GameManager.GetInstance.SelectedSourceControl == GameManager.SourceControlMode.GitFlow) ? 120f : 200f;
     public static float MaxTestEffortDifficultlyScaling = 0.5f;
+    public static float MinimumRequiredProductionQuality = 0.8f;
+
     // How much of the total effort is the testing effort
     public const float GlobalReleaseFactor = 500f;
     public const float UnitTestEffortPercentage = 0.2f;
@@ -41,7 +43,7 @@ public class Constants {
     public const float WorkMultiplePenalty = 0.1f;
 
     // Deployment
-    public const float LeastDeploySuccessProbability = 0.2f; // The minimum probability a deployment is successful
+    public const float LeastDeploySuccessProbability = 0.1f; // The minimum probability a deployment is successful
     public const float LeastDeployedServiceReliability = 0.6f; // The minimum probability a deployed service will introduce a defect in a day
     // Production
     public const float BaseProductionSatisfactionValue = 80;

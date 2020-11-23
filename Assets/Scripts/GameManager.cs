@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviourSingleton<GameManager> {
     public SourceControlMode SelectedSourceControl { get; set; } = SourceControlMode.GitFlow;
 
     public Team CurrentTeam { get; set; }
-    public List<ITask> Tasks { get; private set; } = TaskFactory.DefaultList;
+    public List<ITask> Tasks { get; private set; }
 
     public Production ProductionService { get; private set; }
     public List<IDeployable> DeployedServices { get; private set; }
@@ -54,8 +54,11 @@ public class GameManager : MonoBehaviourSingleton<GameManager> {
     public void TriggerDayTick() {
         CurrentTeam.TickBonus();
         CurrentTeam.CurrentMembers.ForEach(x => x.Work());
-        foreach (var deployable in Tasks.OfType<IDeployable>().Union(DeployedServices).Distinct()) {
-            deployable.TickDay();
+        foreach (var task in Tasks) {
+            task.TickDay();
+        }
+        foreach (var deployableNonTask in DeployedServices.Except(Tasks.OfType<IDeployable>())) {
+            deployableNonTask.TickDay();
         }
         StatManager.EndDay();
         AfterDayTick?.Invoke(this, EventArgs.Empty);
