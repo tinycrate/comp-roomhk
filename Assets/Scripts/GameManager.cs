@@ -54,10 +54,10 @@ public class GameManager : MonoBehaviourSingleton<GameManager> {
     public void TriggerDayTick() {
         CurrentTeam.TickBonus();
         CurrentTeam.CurrentMembers.ForEach(x => x.Work());
-        foreach (var task in Tasks) {
+        foreach (var task in Tasks.ToArray()) {
             task.TickDay();
         }
-        foreach (var deployableNonTask in DeployedServices.Except(Tasks.OfType<IDeployable>())) {
+        foreach (var deployableNonTask in DeployedServices.Except(Tasks.OfType<IDeployable>()).ToArray()) {
             deployableNonTask.TickDay();
         }
         StatManager.EndDay();
@@ -69,10 +69,6 @@ public class GameManager : MonoBehaviourSingleton<GameManager> {
         var sceneManager = MainGameSceneManager.GetInstance;
         if (sceneManager == null) return;
         sceneManager.OnDeployableTaskDeployed((DeployableTask) sender);
-    }
-
-    public void ShowTaskOnTaskList(SimpleTask simpleTask) {
-        MainGameSceneManager.GetInstance.ShowTaskOnTaskList(simpleTask);
     }
 }
 

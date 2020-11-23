@@ -33,8 +33,16 @@ public class SimpleTaskController : MonoBehaviour {
         }
         EffectTitleText.gameObject.SetActive(true);
         EffectText.gameObject.SetActive(true);
-        if (Task.Nature == SimpleTask.TaskNature.Upgrade) {
-            GetComponent<Image>().color = new Color(1f, 0.8584991f, 0.5529412f);
+        switch (Task.Nature) {
+            case SimpleTask.TaskNature.Upgrade:
+                GetComponent<Image>().color = new Color(1f, 0.8584991f, 0.5529412f);
+                break;
+            case SimpleTask.TaskNature.Fix:
+                GetComponent<Image>().color = new Color(1f, 0.603f, 1f);
+                break;
+            case SimpleTask.TaskNature.Improve:
+                GetComponent<Image>().color = new Color(0.9921f,1,0.469f);
+                break;
         }
         TaskTypeText.text = Task.Nature.ToString();
         TaskNameText.text = Task.Name;

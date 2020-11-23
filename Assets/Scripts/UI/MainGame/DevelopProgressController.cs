@@ -81,6 +81,16 @@ public class DevelopProgressController : MonoBehaviour, IMainGameView {
                 }
             }
         }
+        if (DisplayingTask is SimpleTask simpleTask) {
+            progressBarDisplayValue = Utils.MoveTowardsProportion(
+                progressBarDisplayValue,
+                simpleTask.Progress,
+                0.02f,
+                Time.deltaTime / 0.15f
+            );
+            ReleaseBar.fillAmount = progressBarDisplayValue;
+            return;
+        }
         var deployableTask = DisplayingTask as DeployableTask;
         if (deployableTask == null) return;
         if (!Mathf.Approximately(deployableTask.RemainingReleaseEffort, deployableTask.ReleaseEffort)) {

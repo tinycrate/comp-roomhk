@@ -22,6 +22,8 @@ public class DeployableTask : ITask, IDeployable {
     public event EventHandler<float> OnSatisfactionChange;
     public bool Deployed { get; private set; } = false;
 
+    public bool FeatureFixTaskGenerated { get; private set; } = false;
+
     private float totalSatisfaction = 0;
     public float TotalSatisfaction {
         get => totalSatisfaction;
@@ -39,15 +41,21 @@ public class DeployableTask : ITask, IDeployable {
     public event EventHandler OnDeploymentFailure;
     public event EventHandler OnDeployed;
 
+    public float EndProductQualityBonus { get; set; } = 0;
+
     public float EndProductQuality {
         get {
             if (Features.Count <= 0) return 0;
             if (Features.Any(x => x.CurrentState != Feature.State.Merged)) return 0;
-            return Features.Sum(x => x.EndProductQuality) / Features.Count;
+            return Mathf.Min(1f, Features.Sum(x => x.EndProductQuality) / Features.Count + EndProductQualityBonus);
         }
     }
 
     public void TickDay() {
+        if (!FeatureFixTaskGenerated) {
+            GenerateFeatureFixTasks();
+            FeatureFixTaskGenerated = true;
+        }
         if (!Deployed) {
             if (!FeaturesCompleted) {
                 if (Started) {
@@ -82,7 +90,7 @@ public class DeployableTask : ITask, IDeployable {
             // Production defect
             ProductionDefectCount += 1;
             GameManager.GetInstance.StatManager.TotalProductionDefects += 1;
-            OnProductionDefect?.Invoke(this, EventArgs.Empty);
+            OnTriggerProductionDefect();
         } else {
             TotalSatisfaction += EndProductQuality * Value * (1f- Mathf.Min(
                                      Constants.MaxDeployableSatisfactionPunishment,
@@ -96,5 +104,47 @@ public class DeployableTask : ITask, IDeployable {
         Value = value;
         Features = features;
         RemainingReleaseEffort = ReleaseEffort;
+    }
+
+    private void OnTriggerProductionDefect() {
+        OnProductionDefect?.Invoke(this, EventArgs.Empty);
+    }
+
+    private void GenerateFeatureFixTasks() {
+        MainGameSceneManager.GetInstance.RegisterFeatureFixTasks(SimpleTask.CreateTaskEmployeeManaged(
+            SimpleTask.TaskNature.Fix,
+            $"[Large] Deploy fix for {Name}",
+            "Remove maximum of 5 defects",
+            $"Your team notices large amount of defects in the deployed feature {Name}. They suggested they can fix at most 5 of them, but this requires a scheduled downtime of 5 hours. This task can only be done once. You should look for another way to improve your product quality if defects keep happening.",
+            new Requirement("DefectCount", () => ProductionDefectCount >= 5),
+            new List<Requirement>() {new Requirement("[Alert] Will cause 3 hours of downtime", () => true)},
+            new List<Feature>{new Feature("Fix 5 defects", TotalFeatureEffort * 0.5f, 0.8f)},
+            () => {
+                GameManager.GetInstance.ProductionService.ScheduledDowntime = 3 / 24f;
+                ProductionDefectCount -= 5;
+            }
+        ), this);
+        MainGameSceneManager.GetInstance.RegisterFeatureFixTasks(SimpleTask.CreateTaskEmployeeManaged(
+            SimpleTask.TaskNature.Fix,
+            $"[Small] Deploy fix for {Name}",
+            "Remove maximum of 2 defects",
+            $"Your team notices defects in the deployed feature {Name}. You can fix them for a small quantity. This task can only be done once. You should look for another way to improve your product quality if defects keep happening.",
+            new Requirement("DefectCount", () => ProductionDefectCount > 0),
+            new List<Requirement>() {new Requirement("This task has no prerequisites", () => true)},
+            new List<Feature>{new Feature("Fix 2 defects", TotalFeatureEffort * 0.5f, 0.5f)},
+            () => ProductionDefectCount -= 2
+        ), this);
+        MainGameSceneManager.GetInstance.RegisterFeatureFixTasks(SimpleTask.CreateTaskEmployeeManaged(
+            SimpleTask.TaskNature.Improve,
+            $"Improve product {Name}",
+            "Add 20% to product quality",
+            $"After evaluating the performance of the deployed feature {Name}. Your team has formulated some plan to improve it even more. Some suggestions are nitpicking but some are important. You should look at your current product quality to see if it is worth the upgrade.",
+            new Requirement("ViewQuality", () => GameManager.GetInstance.DisplayEndProductQuality && Deployed && EndProductQuality <= 0.996f),
+            new List<Requirement>() {new Requirement("Be able to view product quality", () => GameManager.GetInstance.DisplayEndProductQuality)},
+            new List<Feature>{new Feature("Improve deployed task", TotalFeatureEffort * (1f - EndProductQuality * 0.5f),  Mathf.Clamp((1f - EndProductQuality) / (0.3f), 0.01f, 0.99f))},
+            () => {
+                EndProductQualityBonus += 0.2f;
+            }
+        ), this);
     }
 }

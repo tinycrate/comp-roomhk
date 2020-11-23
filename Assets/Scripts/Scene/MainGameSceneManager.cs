@@ -118,6 +118,12 @@ public class MainGameSceneManager : MonoBehaviourSingleton<MainGameSceneManager>
     public void RegisterToggleableView(IMainGameToggleableView view) {
         toggleableViews.Add(view);
     }
+
+    public void RegisterFeatureFixTasks(ITask task, ITask relativeTask) {
+        GameManager.GetInstance.Tasks.Add(task);
+        TaskListController.AddTaskNextTo(task, relativeTask);
+    }
+
     public void ShowTaskOnTaskList(SimpleTask simpleTask) {
         TaskListController.SpawnSimpleTaskObject(simpleTask);
     }

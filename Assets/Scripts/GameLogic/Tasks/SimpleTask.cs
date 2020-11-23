@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 public class SimpleTask : ITask {
     public enum TaskNature {
@@ -25,6 +26,8 @@ public class SimpleTask : ITask {
     public Requirement ShowRequirement { get; private set; }
     public List<Requirement> UnlockRequirements { get; private set; }
     public Action OnTaskComplete { get; set; }
+
+    public event EventHandler TaskCompleted;
 
     public TaskNature Nature { get; set; }
 
@@ -64,7 +67,7 @@ public class SimpleTask : ITask {
 
     public void TickDay() {
         if (!Shown && ShowRequirement.Evaluate()) {
-            GameManager.GetInstance.ShowTaskOnTaskList(this);
+            MainGameSceneManager.GetInstance.ShowTaskOnTaskList(this);
             Shown = true;
         }
         if (Accepted && !Completed) {
@@ -104,6 +107,7 @@ public class SimpleTask : ITask {
         }
         OnTaskComplete.Invoke();
         Completed = true;
+        TaskCompleted?.Invoke(this, EventArgs.Empty);
     }
 
     public static SimpleTask CreateTaskEmployeeManaged(

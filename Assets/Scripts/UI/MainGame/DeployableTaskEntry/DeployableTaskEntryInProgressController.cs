@@ -37,7 +37,22 @@ public class DeployableTaskEntryInProgressController : MonoBehaviour, ITaskEntry
         if (TaskBeingDisplayed == null) return;
         TaskTypeText.text = "In Progress";
         TaskNameText.text = TaskBeingDisplayed.Name;
-        if (!(TaskBeingDisplayed is DeployableTask deployableTask)) return;
+        if (!(TaskBeingDisplayed is DeployableTask deployableTask)) {
+            if (TaskBeingDisplayed is SimpleTask simpleTask) {
+                LeadTimeText.gameObject.SetActive(false);
+                StatusText.gameObject.SetActive(false);
+                displayingCompletionRate = Utils.MoveTowardsProportion(
+                    displayingCompletionRate,
+                    simpleTask.Progress,
+                    0.02f,
+                    Time.deltaTime / 0.15f
+                );
+                CompletionText.text = $"Completion: {displayingCompletionRate*100:0.#}%";
+            }
+            return;
+        }
+        StatusText.gameObject.SetActive(true);
+        LeadTimeText.gameObject.SetActive(true);
         LeadTimeText.text = $"Lead time: {Mathf.RoundToInt(deployableTask.LeadTime)} day(s)";
         displayingCompletionRate = Utils.MoveTowardsProportion(
             displayingCompletionRate,
