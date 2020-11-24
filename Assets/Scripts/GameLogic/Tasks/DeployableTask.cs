@@ -116,12 +116,12 @@ public class DeployableTask : ITask, IDeployable {
             $"[Large] Deploy fix for {Name}",
             "Remove maximum of 5 defects",
             $"Your team notices large amount of defects in the deployed feature {Name}. They suggested they can fix at most 5 of them, but this requires a scheduled downtime of 3 hours. This task can only be done once. You should look for another way to improve your product quality if defects keep happening.",
-            new Requirement("DefectCount", () => ProductionDefectCount >= 5),
+            new Requirement("DefectCount", () => ProductionDefectCount > 3),
             new List<Requirement>() {new Requirement("[Alert] Will cause 3 hours of downtime", () => true)},
             new List<Feature>{new Feature("Fix 5 defects", TotalFeatureEffort * 0.5f, 0.8f)},
             () => {
                 GameManager.GetInstance.ProductionService.ScheduledDowntime = 3 / 24f;
-                ProductionDefectCount -= 5;
+                ProductionDefectCount -= Mathf.Min(ProductionDefectCount, 5);
             }
         ), this);
         MainGameSceneManager.GetInstance.RegisterFeatureFixTasks(SimpleTask.CreateTaskEmployeeManaged(
@@ -132,7 +132,7 @@ public class DeployableTask : ITask, IDeployable {
             new Requirement("DefectCount", () => ProductionDefectCount > 0),
             new List<Requirement>() {new Requirement("This task has no prerequisites", () => true)},
             new List<Feature>{new Feature("Fix 2 defects", TotalFeatureEffort * 0.5f, 0.5f)},
-            () => ProductionDefectCount -= 2
+            () => ProductionDefectCount -= Mathf.Min(ProductionDefectCount, 2)
         ), this);
         MainGameSceneManager.GetInstance.RegisterFeatureFixTasks(SimpleTask.CreateTaskEmployeeManaged(
             SimpleTask.TaskNature.Improve,

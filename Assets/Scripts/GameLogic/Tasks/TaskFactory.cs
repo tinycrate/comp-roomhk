@@ -18,17 +18,14 @@ public static class TaskFactory {
                         effortRemaining = 2.5f;
                         task.FloatState["effortRemaining"] = effortRemaining;
                     }
+                    task.CustomProgress = (2.5f - effortRemaining) / 2.5f;
+                    if (effortRemaining <= 0) return true;
                     foreach (var employee in task.AssignedEmployees) {
                         employee.PutBurden(0.5f);
                         effortRemaining -= employee.AutomationSkills + employee.AssignedTeam.TeamAutomationKnowledge;
-                        Debug.Log(effortRemaining);
-                        if (effortRemaining <= 0) {
-                            task.FloatState["effortRemaining"] = 0;
-                            return true;
-                        }
+                        effortRemaining = Mathf.Max(0f, effortRemaining);
                     }
                     task.FloatState["effortRemaining"] = effortRemaining;
-                    task.CustomProgress = (2.5f - effortRemaining) / 2.5f;
                     return false;
                 }, true
             ),
