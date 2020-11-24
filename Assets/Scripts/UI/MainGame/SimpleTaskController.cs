@@ -16,6 +16,10 @@ public class SimpleTaskController : MonoBehaviour {
     // Start is called before the first frame update
     void Start() {
         GetComponent<Button>().onClick.AddListener(() => {
+            if (Task.CompletionMethod == SimpleTask.TaskCompletionMethod.EmployeeManaged && Task.Accepted) {
+                MainGameSceneManager.GetInstance.ShowTaskProgress(Task);
+                return;
+            }
             MainGameSceneManager.GetInstance.ShowSimpleTaskPlanning(Task);
         });
     }
